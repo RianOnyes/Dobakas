@@ -14,6 +14,12 @@ export default {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
             },
+            colors: {
+                'berkah-krem': '#FFFBDE',
+                'berkah-mint': '#90D1CA',
+                'berkah-teal-gelap': '#129990',
+                'berkah-hijau-gelap': '#096B68',
+            }
         },
     },
 

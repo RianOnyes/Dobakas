@@ -45,4 +45,30 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    // Role checking methods
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
+    }
+
+    public function isDonatur(): bool
+    {
+        return $this->role === 'donatur';
+    }
+
+    public function isOrganisasi(): bool
+    {
+        return $this->role === 'organisasi';
+    }
+
+    public function getDashboardRoute(): string
+    {
+        return match($this->role) {
+            'admin' => 'admin.dashboard',
+            'donatur' => 'donatur.dashboard',
+            'organisasi' => 'organisasi.dashboard',
+            default => 'dashboard'
+        };
+    }
 }
