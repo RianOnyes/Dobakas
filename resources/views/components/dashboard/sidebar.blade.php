@@ -1,23 +1,11 @@
-{{--
-|--------------------------------------------------------------------------
-| Dashboard Sidebar Component
-|--------------------------------------------------------------------------
-|
-| Reusable sidebar component that shows different navigation items
-| based on the authenticated user's role.
-|
---}}
-
 <div class="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
     <!-- Sidebar component, swap this element with another sidebar if you like -->
     <div class="flex grow flex-col gap-y-5 overflow-y-auto bg-gradient-to-b from-berkah-teal-gelap to-berkah-hijau-gelap px-6 pb-4">
         <!-- Logo -->
         <div class="flex h-16 shrink-0 items-center">
             <div class="flex items-center">
-                <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center text-berkah-teal-gelap font-bold text-lg mr-3">
-                    BB
-                </div>
-                <div class="text-white">
+                <img src="{{ asset('images/berkah-babe-logo.png') }}" alt="Berkah BaBe" class="w-10 h-10 rounded-full bg-white p-1">
+                <div class="text-white ml-3">
                     <div class="text-xl font-bold">Berkah BaBe</div>
                     <div class="text-xs text-berkah-mint opacity-75">{{ ucfirst(auth()->user()->role) }} Dashboard</div>
                 </div>
@@ -32,27 +20,25 @@
                             <!-- Admin Navigation -->
                             <x-dashboard.nav-item route="admin.dashboard" icon="home" label="Dashboard" />
                             <x-dashboard.nav-item route="admin.users" icon="users" label="Kelola Pengguna" />
-                            <x-dashboard.nav-item route="#" icon="chart" label="Statistik" />
-                            <x-dashboard.nav-item route="#" icon="donations" label="Kelola Donasi" />
-                            <x-dashboard.nav-item route="#" icon="organizations" label="Kelola Organisasi" />
-                            <x-dashboard.nav-item route="#" icon="reports" label="Laporan" />
-                            <x-dashboard.nav-item route="#" icon="settings" label="Pengaturan" />
+                            <x-dashboard.nav-item route="admin.statistics" icon="chart" label="Statistik & Laporan" />
+                            <x-dashboard.nav-item route="admin.donations" icon="donations" label="Kelola Donasi" />
+                            <x-dashboard.nav-item route="admin.organizations" icon="organizations" label="Kelola Organisasi" />
+                            <x-dashboard.nav-item route="admin.settings" icon="settings" label="Pengaturan" />
                         @elseif(auth()->user()->isDonatur())
                             <!-- Donatur Navigation -->
                             <x-dashboard.nav-item route="donatur.dashboard" icon="home" label="Dashboard" />
-                            <x-dashboard.nav-item route="#" icon="search" label="Cari Bantuan" />
-                            <x-dashboard.nav-item route="#" icon="donations" label="Donasi Saya" />
-                            <x-dashboard.nav-item route="#" icon="heart" label="Favorit" />
-                            <x-dashboard.nav-item route="#" icon="history" label="Riwayat" />
-                            <x-dashboard.nav-item route="#" icon="certificate" label="Sertifikat" />
+                            <x-dashboard.nav-item route="donatur.buat-donasi" icon="plus" label="Buat Donasi" />
+                            <x-dashboard.nav-item route="donatur.cari-bantuan" icon="search" label="Cari Bantuan" />
+                            <x-dashboard.nav-item route="donatur.donasi-saya" icon="donations" label="Donasi Saya" />
+                            <x-dashboard.nav-item route="donatur.riwayat" icon="history" label="Riwayat" />
                         @elseif(auth()->user()->isOrganisasi())
                             <!-- Organisasi Navigation -->
                             <x-dashboard.nav-item route="organisasi.dashboard" icon="home" label="Dashboard" />
-                            <x-dashboard.nav-item route="#" icon="plus" label="Buat Permintaan" />
-                            <x-dashboard.nav-item route="#" icon="requests" label="Permintaan Saya" />
-                            <x-dashboard.nav-item route="#" icon="donations" label="Donasi Masuk" />
-                            <x-dashboard.nav-item route="#" icon="profile" label="Profil Organisasi" />
-                            <x-dashboard.nav-item route="#" icon="reports" label="Laporan" />
+                            <x-dashboard.nav-item route="organisasi.warehouse-donations" icon="search" label="Gudang Admin" />
+                            <x-dashboard.nav-item route="organisasi.claimed-donations" icon="donations" label="Donasi Diklaim" />
+                            <x-dashboard.nav-item route="organisasi.requests" icon="requests" label="Permintaan Saya" />
+                            <x-dashboard.nav-item route="organisasi.create-request" icon="plus" label="Buat Permintaan" />
+                            <x-dashboard.nav-item route="organisasi.profile" icon="profile" label="Profil Organisasi" />
                         @endif
                     </ul>
                 </li>

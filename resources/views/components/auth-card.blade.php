@@ -7,21 +7,28 @@
 | seperti login dan register.
 |
 --}}
-<div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-berkah-krem">
+<div class="min-h-screen flex flex-col justify-center items-center px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-berkah-cream via-white to-berkah-accent/10">
     {{-- Logo --}}
-    <div>
-        <a href="/">
-            <div class="flex items-center mb-6">
-                <div class="w-12 h-12 bg-berkah-teal-gelap rounded-full flex items-center justify-center text-white font-bold text-xl mr-3">
-                    BB
+    <div class="text-center mb-6">
+        <a href="/" class="inline-block">
+            <div class="flex items-center justify-center">
+                {{-- Logo Image --}}
+                <div class="w-32 h-32 rounded-lg flex items-center justify-center">
+                    <img src="{{ asset('images/berkah-babe-logo.png') }}" alt="Berkah BaBe Logo" class="w-32 h-32 object-contain">
                 </div>
-                <span class="text-3xl font-bold text-berkah-hijau-gelap">Berkah BaBe</span>
             </div>
         </a>
     </div>
 
     {{-- Form Container --}}
-    <div class="w-full sm:max-w-md mt-6 px-6 py-8 bg-white shadow-md overflow-hidden sm:rounded-lg">
+    <div class="w-full max-w-sm bg-white rounded-xl shadow-xl border border-gray-100 p-6">
         {{ $slot }}
+    </div>
+
+    {{-- Footer --}}
+    <div class="mt-4 text-center">
+        <p class="text-xs text-gray-500">
+            &copy; {{ date('Y') }} Berkah BaBe. Semua hak cipta dilindungi.
+        </p>
     </div>
 </div>

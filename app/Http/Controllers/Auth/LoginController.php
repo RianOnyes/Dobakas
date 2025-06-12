@@ -28,23 +28,25 @@ class LoginController extends Controller
     {
         // 1. Validasi input
         $credentials = $request->validate([
-            'username' => ['required', 'string'],
+            'email' => ['required', 'string', 'email'],
             'password' => ['required', 'string'],
         ]);
 
         // 2. Coba untuk mengautentikasi user
-        // Note: Pastikan kolom di database Anda adalah 'username', bukan 'email'.
-        // Jika menggunakan 'email', ganti 'username' di array menjadi 'email'.
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
 
-            return redirect()->intended('dashboard');
+            // Redirect to role-specific dashboard
+            $user = Auth::user();
+            $dashboardRoute = $user->getDashboardRoute();
+            
+            return redirect()->intended(route($dashboardRoute));
         }
 
         // 3. Jika gagal, kembali ke halaman login dengan pesan error
         return back()->withErrors([
-            'username' => 'Username atau password yang Anda masukkan salah.',
-        ])->onlyInput('username');
+            'email' => 'Email atau password yang Anda masukkan salah.',
+        ])->onlyInput('email');
     }
 
     /**

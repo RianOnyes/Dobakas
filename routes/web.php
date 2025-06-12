@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\DonaturController;
+use App\Http\Controllers\OrganisasiController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -19,22 +21,69 @@ Route::get('/dashboard', function () {
 // Admin Routes
 Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
+    
+    // User management
     Route::get('/users', [AdminController::class, 'users'])->name('users');
     Route::patch('/users/{user}/verify', [AdminController::class, 'verifyUser'])->name('users.verify');
+    Route::delete('/users/{user}', [AdminController::class, 'deleteUser'])->name('users.delete');
+    
+    // Statistics & Reports (Combined)
+    Route::get('/statistics', [AdminController::class, 'statistics'])->name('statistics');
+    Route::get('/statistics/export', [AdminController::class, 'exportStatistics'])->name('statistics.export');
+    
+    // Donation management
+    Route::get('/donations', [AdminController::class, 'donations'])->name('donations');
+    Route::get('/donations/{donation}', [AdminController::class, 'showDonation'])->name('donations.show');
+    Route::patch('/donations/{donation}/status', [AdminController::class, 'updateDonationStatus'])->name('donations.status');
+    
+    // Organization management
+    Route::get('/organizations', [AdminController::class, 'organizations'])->name('organizations');
+    Route::get('/organizations/{organization}', [AdminController::class, 'showOrganization'])->name('organizations.show');
+    
+    // Settings
+    Route::get('/settings', [AdminController::class, 'settings'])->name('settings');
+    Route::patch('/settings', [AdminController::class, 'updateSettings'])->name('settings.update');
 });
 
 // Donatur Routes
 Route::middleware(['auth', 'verified', 'donatur'])->prefix('donatur')->name('donatur.')->group(function () {
-    Route::get('/dashboard', function () {
-        return view('donatur.dashboard');
-    })->name('dashboard');
+    Route::get('/dashboard', [DonaturController::class, 'dashboard'])->name('dashboard');
+    Route::get('/cari-bantuan', [DonaturController::class, 'cariBantuan'])->name('cari-bantuan');
+    Route::get('/organisasi/{organization}', [DonaturController::class, 'showOrganization'])->name('organization.show');
+    
+    // Donation Management
+    Route::get('/buat-donasi', [DonaturController::class, 'createDonation'])->name('buat-donasi');
+    Route::post('/buat-donasi', [DonaturController::class, 'storeDonation'])->name('store-donasi');
+    Route::get('/donasi-saya', [DonaturController::class, 'donasiSaya'])->name('donasi-saya');
+    Route::get('/riwayat', [DonaturController::class, 'riwayat'])->name('riwayat');
+    Route::get('/donasi/{donation}', [DonaturController::class, 'showDonation'])->name('donation.show');
+    Route::patch('/donasi/{donation}/cancel', [DonaturController::class, 'cancelDonation'])->name('donation.cancel');
 });
 
 // Organisasi Routes
 Route::middleware(['auth', 'verified', 'organisasi'])->prefix('organisasi')->name('organisasi.')->group(function () {
-    Route::get('/dashboard', function () {
-        return view('organisasi.dashboard');
-    })->name('dashboard');
+    Route::get('/dashboard', [OrganisasiController::class, 'dashboard'])->name('dashboard');
+    
+    // Profile Management
+    Route::get('/profile', [OrganisasiController::class, 'profile'])->name('profile');
+    Route::patch('/profile', [OrganisasiController::class, 'updateProfile'])->name('profile.update');
+    
+    // Claimed Donations Management
+    Route::get('/donasi-diklaim', [OrganisasiController::class, 'claimedDonations'])->name('claimed-donations');
+    Route::patch('/donasi/{donation}/complete', [OrganisasiController::class, 'completeDonation'])->name('donation.complete');
+    
+    // Warehouse Donations Browsing
+    Route::get('/gudang-admin', [OrganisasiController::class, 'warehouseDonations'])->name('warehouse-donations');
+    Route::get('/donasi/{donation}', [OrganisasiController::class, 'showDonation'])->name('donation.show');
+    Route::patch('/donasi/{donation}/claim', [OrganisasiController::class, 'claimDonation'])->name('donation.claim');
+    
+    // Request Management
+    Route::get('/permintaan', [OrganisasiController::class, 'requests'])->name('requests');
+    Route::get('/buat-permintaan', [OrganisasiController::class, 'createRequest'])->name('create-request');
+    Route::post('/buat-permintaan', [OrganisasiController::class, 'storeRequest'])->name('store-request');
+    Route::get('/permintaan/{request}', [OrganisasiController::class, 'showRequest'])->name('request.show');
+    Route::patch('/permintaan/{request}/status', [OrganisasiController::class, 'updateRequestStatus'])->name('request.status');
+    Route::delete('/permintaan/{request}', [OrganisasiController::class, 'deleteRequest'])->name('request.delete');
 });
 
 Route::middleware('auth')->group(function () {

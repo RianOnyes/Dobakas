@@ -1,72 +1,94 @@
 <x-dashboard-layout>
-    <x-slot name="header">Admin Dashboard</x-slot>
+    <x-slot name="header">Dasbor Admin</x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+    <div class="py-4 sm:py-6 lg:py-12">
+        <div class="max-w-7xl mx-auto">
             <!-- Stats Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 mb-4 sm:mb-6">
                 <x-dashboard.stat-card 
                     title="Total Pengguna" 
                     :value="$stats['total_users']" 
-                    icon="users" 
-                    color="blue" />
+                    icon="users" />
                 
                 <x-dashboard.stat-card 
                     title="Donatur" 
                     :value="$stats['total_donatur']" 
-                    icon="heart" 
-                    color="green" />
+                    icon="donations" />
                 
                 <x-dashboard.stat-card 
                     title="Organisasi" 
                     :value="$stats['total_organisasi']" 
-                    icon="organizations" 
-                    color="purple" />
+                    icon="organizations" />
                 
                 <x-dashboard.stat-card 
                     title="Menunggu Verifikasi" 
                     :value="$stats['pending_verification']" 
-                    icon="pending" 
-                    color="yellow" />
+                    icon="pending" />
             </div>
 
             <!-- Recent Users -->
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6">
-                    <div class="flex items-center justify-between mb-4">
-                        <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">Recent Users</h3>
-                        <a href="{{ route('admin.users') }}" class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300">View all</a>
+            <div class="bg-white/80 backdrop-blur-sm dark:bg-gray-800/80 overflow-hidden shadow-lg sm:rounded-lg border border-berkah-accent/20">
+                <div class="p-3 sm:p-6">
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4">
+                        <h3 class="text-base sm:text-lg font-medium text-gray-900 dark:text-gray-100 mb-2 sm:mb-0">Pengguna Terbaru</h3>
+                        <a href="{{ route('admin.users') }}" class="text-sm text-berkah-secondary hover:text-berkah-primary dark:text-berkah-accent dark:hover:text-berkah-secondary transition-colors">Lihat Semua</a>
                     </div>
-                    <div class="overflow-x-auto">
-                        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                            <thead class="bg-gray-50 dark:bg-gray-700">
+                    
+                    <!-- Mobile view (cards) -->
+                    <div class="block sm:hidden space-y-3">
+                        @foreach($recent_users as $user)
+                        <div class="bg-berkah-cream/50 dark:bg-gray-700 rounded-lg p-3 border border-berkah-accent/20">
+                            <div class="flex items-center justify-between mb-2">
+                                <h4 class="text-sm font-medium text-gray-900 dark:text-gray-100">{{ $user->name }}</h4>
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                                    @if($user->role === 'admin') bg-berkah-primary text-white
+                                    @elseif($user->role === 'donatur') bg-berkah-secondary text-white
+                                    @else bg-berkah-accent text-berkah-primary @endif">
+                                    {{ ucfirst($user->role) }}
+                                </span>
+                            </div>
+                            <p class="text-xs text-gray-500 dark:text-gray-300 mb-2">{{ $user->email }}</p>
+                            <div class="flex items-center justify-between">
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $user->is_verified ? 'bg-berkah-secondary text-white' : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-800 dark:text-yellow-100' }}">
+                                    {{ $user->is_verified ? 'Terverifikasi' : 'Menunggu' }}
+                                </span>
+                                <span class="text-xs text-gray-500 dark:text-gray-300">{{ $user->created_at->format('d M Y') }}</span>
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
+                    
+                    <!-- Desktop view (table) -->
+                    <div class="hidden sm:block overflow-x-auto">
+                        <table class="min-w-full divide-y divide-berkah-accent/20">
+                            <thead class="bg-berkah-cream/30 dark:bg-gray-700">
                                 <tr>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Name</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Email</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Role</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Status</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Joined</th>
+                                    <th class="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Nama</th>
+                                    <th class="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Email</th>
+                                    <th class="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Role</th>
+                                    <th class="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Status</th>
+                                    <th class="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Bergabung</th>
                                 </tr>
                             </thead>
-                            <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                            <tbody class="bg-white/50 dark:bg-gray-800 divide-y divide-berkah-accent/10">
                                 @foreach($recent_users as $user)
-                                <tr>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">{{ $user->name }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">{{ $user->email }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
+                                <tr class="hover:bg-berkah-cream/30 transition-colors">
+                                    <td class="px-3 sm:px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">{{ $user->name }}</td>
+                                    <td class="px-3 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">{{ $user->email }}</td>
+                                    <td class="px-3 sm:px-6 py-4 whitespace-nowrap">
                                         <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                                            @if($user->role === 'admin') bg-red-100 text-red-800 dark:bg-red-800 dark:text-red-100
-                                            @elseif($user->role === 'donatur') bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100
-                                            @else bg-purple-100 text-purple-800 dark:bg-purple-800 dark:text-purple-100 @endif">
+                                            @if($user->role === 'admin') bg-berkah-primary text-white
+                                            @elseif($user->role === 'donatur') bg-berkah-secondary text-white
+                                            @else bg-berkah-accent text-berkah-primary @endif">
                                             {{ ucfirst($user->role) }}
                                         </span>
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $user->is_verified ? 'bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100' : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-800 dark:text-yellow-100' }}">
-                                            {{ $user->is_verified ? 'Verified' : 'Pending' }}
+                                    <td class="px-3 sm:px-6 py-4 whitespace-nowrap">
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $user->is_verified ? 'bg-berkah-secondary text-white' : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-800 dark:text-yellow-100' }}">
+                                            {{ $user->is_verified ? 'Terverifikasi' : 'Menunggu' }}
                                         </span>
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">{{ $user->created_at->format('M d, Y') }}</td>
+                                    <td class="px-3 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">{{ $user->created_at->format('d M Y') }}</td>
                                 </tr>
                                 @endforeach
                             </tbody>

@@ -21,6 +21,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
+        'is_verified',
+        'email_verified_at',
     ];
 
     /**
@@ -43,6 +46,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'is_verified' => 'boolean',
         ];
     }
 
@@ -70,5 +74,37 @@ class User extends Authenticatable
             'organisasi' => 'organisasi.dashboard',
             default => 'dashboard'
         };
+    }
+
+    /**
+     * Get the organization detail associated with the user.
+     */
+    public function organizationDetail()
+    {
+        return $this->hasOne(OrganizationDetail::class);
+    }
+
+    /**
+     * Get the donations made by this user (if donatur).
+     */
+    public function donations()
+    {
+        return $this->hasMany(Donation::class);
+    }
+
+    /**
+     * Get the donations claimed by this user (if organisasi).
+     */
+    public function claimedDonations()
+    {
+        return $this->hasMany(Donation::class, 'claimed_by_organization_id');
+    }
+
+    /**
+     * Get the donation requests made by this user (if organisasi).
+     */
+    public function donationRequests()
+    {
+        return $this->hasMany(DonationRequest::class, 'organization_id');
     }
 }

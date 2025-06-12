@@ -1,61 +1,326 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🌟 Berkah BaBe - Platform Donasi Barang Bekas
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Sebuah platform web yang menghubungkan donatur dengan organisasi sosial untuk mendistribusikan barang bekas yang masih layak pakai.
 
-## About Laravel
+## 📋 Daftar Isi
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- [Tentang Proyek](#tentang-proyek)
+- [Fitur Utama](#fitur-utama)
+- [Persyaratan Sistem](#persyaratan-sistem)
+- [Instalasi](#instalasi)
+- [Konfigurasi](#konfigurasi)
+- [Menjalankan Aplikasi](#menjalankan-aplikasi)
+- [Akun Testing](#akun-testing)
+- [Troubleshooting](#troubleshooting)
+- [Kontribusi](#kontribusi)
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 🎯 Tentang Proyek
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Berkah BaBe adalah platform yang memungkinkan:
+- **Donatur** untuk menyumbangkan barang bekas yang masih layak pakai
+- **Organisasi sosial** untuk mencari dan mengklaim donasi yang dibutuhkan
+- **Admin** untuk mengelola seluruh sistem dan memverifikasi donasi
 
-## Learning Laravel
+## ✨ Fitur Utama
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### Untuk Donatur
+- 📝 Membuat listing donasi dengan foto dan deskripsi
+- 📱 Dashboard untuk mengelola donasi
+- 🔍 Mencari organisasi yang membutuhkan bantuan
+- 📊 Melihat riwayat donasi
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+### Untuk Organisasi
+- 🛒 Mengklaim donasi yang tersedia di gudang admin
+- 📋 Membuat permintaan donasi spesifik
+- 👥 Mengelola profil organisasi
+- 📈 Dashboard dengan statistik klaim donasi
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Untuk Admin
+- 🎛️ Dashboard dengan statistik lengkap
+- ✅ Verifikasi donasi dari pending ke available
+- 👤 Manajemen pengguna dan organisasi
+- 📊 Laporan dan analitik sistem
 
-## Laravel Sponsors
+## 🔧 Persyaratan Sistem
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+Pastikan sistem Anda memiliki:
 
-### Premium Partners
+- **PHP** >= 8.1
+- **Composer** (latest version)
+- **Node.js** >= 16.x dan **npm**
+- **MySQL** >= 8.0 atau **MariaDB** >= 10.4
+- **Git**
+- **Web Server** (Apache/Nginx) atau menggunakan built-in server Laravel
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+### Software yang Direkomendasikan
+- **XAMPP** (untuk Windows) - sudah include PHP, MySQL, Apache
+- **MAMP** (untuk macOS)
+- **LAMP** (untuk Linux)
 
-## Contributing
+## 🚀 Instalasi
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### 1. Clone Repository
 
-## Code of Conduct
+```bash
+git clone https://github.com/rwbu69/donasi-barang-bekas.git
+cd donasi-barang-bekas
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### 2. Install Dependencies PHP
 
-## Security Vulnerabilities
+```bash
+composer install
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### 3. Install Dependencies Node.js
 
-## License
+```bash
+npm install
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### 4. Copy File Environment
+
+```bash
+# Untuk Windows
+copy .env.example .env
+
+# Untuk macOS/Linux
+cp .env.example .env
+```
+
+### 5. Generate Application Key
+
+```bash
+php artisan key:generate
+```
+
+## ⚙️ Konfigurasi
+
+### 1. Konfigurasi Database
+
+Edit file `.env` dan sesuaikan dengan database Anda:
+
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=donasi_barang_bekas
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+### 2. Buat Database
+
+Buat database baru di MySQL:
+
+```sql
+CREATE DATABASE donasi_barang_bekas;
+```
+
+### 3. Jalankan Migrasi dan Seeder
+
+```bash
+# Jalankan migrasi untuk membuat tabel
+php artisan migrate
+
+# (Opsional) Jalankan seeder untuk data dummy
+php artisan db:seed
+```
+
+### 4. Buat Storage Link
+
+```bash
+php artisan storage:link
+```
+
+### 5. Compile Assets
+
+```bash
+# Development
+npm run dev
+
+# Atau untuk production
+npm run build
+```
+
+## 🏃‍♂️ Menjalankan Aplikasi
+
+### Metode 1: Laravel Development Server
+
+```bash
+php artisan serve
+```
+
+Aplikasi akan berjalan di: `http://localhost:8000`
+
+### Metode 2: XAMPP/MAMP
+
+1. Pindahkan folder proyek ke direktori web server (htdocs untuk XAMPP)
+2. Akses melalui browser: `http://localhost/donasi-barang-bekas/public`
+
+## 👥 Akun Testing
+
+Setelah menjalankan seeder, Anda dapat menggunakan akun berikut untuk testing:
+
+### Admin
+- **Email:** admin@berkahbabe.com
+- **Password:** password123
+- **Role:** Administrator
+
+### Donatur
+- **Email:** donatur@example.com
+- **Password:** password123
+- **Role:** Donatur
+
+### Organisasi
+- **Email:** organisasi@example.com
+- **Password:** password123
+- **Role:** Organisasi
+
+## 🎨 Tema Warna
+
+Aplikasi menggunakan tema warna "Berkah":
+- **Primary:** `#096B68` (Hijau Teal Gelap)
+- **Secondary:** `#129990` (Hijau Teal)
+- **Accent:** `#90D1CA` (Hijau Teal Muda)
+- **Cream:** `#FFFBDE` (Krem Lembut)
+
+## 📁 Struktur Folder Penting
+
+```
+donasi-barang-bekas/
+├── app/
+│   ├── Http/Controllers/
+│   │   ├── AdminController.php
+│   │   ├── DonaturController.php
+│   │   └── OrganisasiController.php
+│   └── Models/
+│       ├── User.php
+│       ├── Donation.php
+│       └── OrganizationDetail.php
+├── resources/
+│   └── views/
+│       ├── admin/
+│       ├── donatur/
+│       ├── organisasi/
+│       └── auth/
+├── routes/
+│   ├── web.php
+│   └── auth.php
+└── public/
+    └── images/
+```
+
+## 🐛 Troubleshooting
+
+### Error: "No application encryption key has been specified"
+```bash
+php artisan key:generate
+```
+
+### Error: "Class 'PDO' not found"
+- Pastikan PHP extension `pdo_mysql` sudah diaktifkan di `php.ini`
+
+### Error: "Permission denied" (Linux/macOS)
+```bash
+chmod -R 775 storage bootstrap/cache
+sudo chown -R www-data:www-data storage bootstrap/cache
+```
+
+### Error: "Node.js version tidak kompatibel"
+- Update Node.js ke versi 16.x atau lebih baru
+- Atau gunakan nvm: `nvm install 16 && nvm use 16`
+
+### Error Database Connection
+1. Pastikan MySQL/MariaDB sudah berjalan
+2. Cek kredensial database di file `.env`
+3. Pastikan database sudah dibuat
+
+### Assets Tidak Muncul
+```bash
+npm run dev
+# atau
+npm run build
+```
+
+## 🔄 Update Kode
+
+Untuk mendapatkan update terbaru:
+
+```bash
+git pull origin main
+composer install
+npm install
+php artisan migrate
+npm run dev
+```
+
+## 📝 Kontribusi
+
+⚠️ **PENTING: JANGAN PERNAH PUSH LANGSUNG KE BRANCH MASTER!** ⚠️
+
+### Workflow yang Benar:
+
+1. Fork repository ini ke akun GitHub Anda
+2. Clone fork Anda (bukan repository asli):
+   ```bash
+   git clone https://github.com/USERNAME_ANDA/donasi-barang-bekas.git
+   ```
+3. Tambahkan remote upstream:
+   ```bash
+   git remote add upstream https://github.com/rwbu69/donasi-barang-bekas.git
+   ```
+4. Selalu buat branch baru untuk setiap fitur/perbaikan:
+   ```bash
+   git checkout -b fitur-baru
+   ```
+5. Lakukan perubahan dan commit:
+   ```bash
+   git add .
+   git commit -m "Menambah fitur baru"
+   ```
+6. Push ke fork Anda (BUKAN ke master):
+   ```bash
+   git push origin fitur-baru
+   ```
+7. Buat Pull Request dari branch Anda ke master repository asli
+
+### Sinkronisasi dengan Repository Asli:
+
+```bash
+# Update dari repository asli
+git fetch upstream
+git checkout master
+git merge upstream/master
+git push origin master
+```
+
+### ❌ Yang TIDAK Boleh Dilakukan:
+- `git push origin master` (push langsung ke master)
+- `git push upstream master` (push ke repository asli)
+- Commit langsung di branch master
+
+### ✅ Yang Harus Dilakukan:
+- Selalu buat branch baru untuk setiap perubahan
+- Test perubahan Anda sebelum membuat PR
+- Tulis commit message yang jelas dan deskriptif
+- Update branch Anda dari upstream sebelum membuat PR
+
+## 📞 Bantuan
+
+Jika mengalami masalah saat instalasi atau menjalankan aplikasi:
+
+1. Pastikan semua persyaratan sistem sudah terpenuhi
+2. Periksa file log di `storage/logs/laravel.log`
+3. Jalankan `php artisan config:clear` dan `php artisan cache:clear`
+4. Buat issue di GitHub repository
+
+## 📄 Lisensi
+
+Proyek ini menggunakan lisensi MIT. Lihat file `LICENSE` untuk detail lebih lanjut.
+
+---
+
+**Selamat mencoba! 🎉**
+
+Jika ada pertanyaan atau butuh bantuan, jangan ragu untuk bertanya!

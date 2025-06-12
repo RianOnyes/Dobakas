@@ -65,18 +65,29 @@
                                         {{ $user->created_at->format('M d, Y') }}
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                        @if(!$user->is_verified)
-                                            <form method="POST" action="{{ route('admin.users.verify', $user) }}" class="inline">
-                                                @csrf
-                                                @method('PATCH')
-                                                <button type="submit" class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300 mr-3">
-                                                    Verify
-                                                </button>
-                                            </form>
-                                        @endif
-                                        <a href="#" class="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-300">
-                                            View Details
-                                        </a>
+                                        <div class="flex items-center space-x-2">
+                                            @if(!$user->is_verified)
+                                                <form method="POST" action="{{ route('admin.users.verify', $user) }}" class="inline">
+                                                    @csrf
+                                                    @method('PATCH')
+                                                    <button type="submit" class="inline-flex items-center px-3 py-1 border border-transparent text-xs leading-4 font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition ease-in-out duration-150">
+                                                        Verifikasi
+                                                    </button>
+                                                </form>
+                                            @endif
+                                            
+                                            @if(!$user->isAdmin())
+                                                <form method="POST" action="{{ route('admin.users.delete', $user) }}" class="inline" id="deleteUserForm{{ $user->id }}">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="button" 
+                                                            onclick="showModal('deleteUserModal{{ $user->id }}', document.getElementById('deleteUserForm{{ $user->id }}'))"
+                                                            class="inline-flex items-center px-3 py-1 border border-transparent text-xs leading-4 font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition ease-in-out duration-150">
+                                                        Hapus
+                                                    </button>
+                                                </form>
+                                            @endif
+                                        </div>
                                     </td>
                                 </tr>
                                 @empty
@@ -100,4 +111,17 @@
             </div>
         </div>
     </div>
+
+    <!-- Confirmation Modals for user deletion -->
+    @foreach($users as $user)
+        @if(!$user->isAdmin())
+            <x-confirmation-modal 
+                id="deleteUserModal{{ $user->id }}"
+                title="Hapus Pengguna"
+                message="Apakah Anda yakin ingin menghapus pengguna '{{ $user->name }}'? Tindakan ini tidak dapat dibatalkan dan akan menghapus semua data yang terkait."
+                confirmText="Ya, Hapus Pengguna"
+                cancelText="Batal"
+                confirmClass="bg-red-600 hover:bg-red-700" />
+        @endif
+    @endforeach
 </x-dashboard-layout> 

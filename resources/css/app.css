@@ -1,3 +1,67 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Custom styles to prevent layout issues */
+@layer base {
+
+    html,
+    body {
+        overflow-x: hidden;
+    }
+
+    body {
+        position: relative;
+    }
+}
+
+@layer components {
+
+    /* Button styles using new color scheme */
+    .btn-primary {
+        @apply px-4 py-2 bg-gradient-to-r from-berkah-primary to-berkah-secondary text-white rounded-md hover:from-berkah-secondary hover:to-berkah-primary transition-all duration-300 font-medium shadow-md hover:shadow-lg;
+    }
+
+    .btn-secondary {
+        @apply px-4 py-2 bg-berkah-accent text-berkah-primary border border-berkah-primary rounded-md hover:bg-berkah-primary hover:text-white transition-colors duration-300 font-medium;
+    }
+
+    .btn-outline {
+        @apply px-4 py-2 border-2 border-berkah-secondary text-berkah-secondary rounded-md hover:bg-berkah-secondary hover:text-white transition-colors duration-300 font-medium;
+    }
+
+    /* Card styles */
+    .card-berkah {
+        @apply bg-white/80 backdrop-blur-sm border border-berkah-accent/20 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300;
+    }
+
+    /* Form input styles */
+    .input-berkah {
+        @apply rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 shadow-sm focus:border-berkah-secondary focus:ring-berkah-secondary;
+    }
+
+    /* Link styles */
+    .link-berkah {
+        @apply text-berkah-secondary hover:text-berkah-primary transition-colors duration-200;
+    }
+
+    /* Badge styles */
+    .badge-primary {
+        @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-berkah-primary text-white;
+    }
+
+    .badge-secondary {
+        @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-berkah-secondary text-white;
+    }
+
+    .badge-accent {
+        @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-berkah-accent text-berkah-primary;
+    }
+}
+
+/* Ensure modals and overlays don't create unwanted scrollbars */
+@layer utilities {
+    .modal-open {
+        overflow: hidden !important;
+    }
+}
