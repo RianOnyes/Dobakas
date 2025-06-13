@@ -250,5 +250,8 @@
             });
         });
     </script>
+
+    <!-- Additional scripts stack -->
+    @stack('scripts')
 </body>
 </html> 

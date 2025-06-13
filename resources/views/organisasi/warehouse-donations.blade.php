@@ -239,11 +239,12 @@
     <!-- Claim Confirmation Modals -->
     @foreach($donations as $donation)
         <x-confirmation-modal 
-            modalId="claimModal{{ $donation->id }}"
+            id="claimModal{{ $donation->id }}"
             title="Konfirmasi Klaim Donasi"
             message="Apakah Anda yakin ingin mengklaim donasi '{{ $donation->title }}'? Setelah diklaim, donasi ini akan menjadi tanggung jawab organisasi Anda."
             confirmText="Ya, Klaim Donasi"
             cancelText="Batal"
+            confirmClass="bg-berkah-teal hover:bg-berkah-hijau-gelap"
         />
     @endforeach
 </x-dashboard-layout> 

@@ -30,6 +30,8 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
     // Statistics & Reports (Combined)
     Route::get('/statistics', [AdminController::class, 'statistics'])->name('statistics');
     Route::get('/statistics/export', [AdminController::class, 'exportStatistics'])->name('statistics.export');
+    Route::get('/create-sample-data', [AdminController::class, 'createSampleDataManual'])->name('create-sample-data');
+    Route::get('/debug-counts', [AdminController::class, 'debugCounts'])->name('debug-counts');
     
     // Donation management
     Route::get('/donations', [AdminController::class, 'donations'])->name('donations');
