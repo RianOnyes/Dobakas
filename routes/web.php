@@ -54,8 +54,11 @@ Route::middleware(['auth', 'verified', 'donatur'])->prefix('donatur')->name('don
     Route::get('/organisasi/{organization}', [DonaturController::class, 'showOrganization'])->name('organization.show');
     
     // Donation Management
-    Route::get('/buat-donasi', [DonaturController::class, 'createDonation'])->name('buat-donasi');
-    Route::post('/buat-donasi', [DonaturController::class, 'storeDonation'])->name('store-donasi');
+    Route::get('/buat-donasi', [DonaturController::class, 'selectDonationType'])->name('buat-donasi');
+    Route::get('/buat-donasi/barang', [DonaturController::class, 'createDonation'])->name('buat-donasi-barang');
+    Route::post('/buat-donasi/barang', [DonaturController::class, 'storeDonation'])->name('store-donasi-barang');
+    Route::get('/buat-donasi/uang', [DonaturController::class, 'createMoneyDonation'])->name('buat-donasi-uang');
+    Route::post('/buat-donasi/uang', [DonaturController::class, 'storeMoneyDonation'])->name('store-donasi-uang');
     Route::get('/donasi-saya', [DonaturController::class, 'donasiSaya'])->name('donasi-saya');
     Route::get('/riwayat', [DonaturController::class, 'riwayat'])->name('riwayat');
     Route::get('/donasi/{donation}', [DonaturController::class, 'showDonation'])->name('donation.show');

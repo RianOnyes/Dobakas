@@ -30,9 +30,9 @@
                 <div class="lg:col-span-2">
                     <!-- Images -->
                     @if($donation->photos && count($donation->photos) > 0)
-                        <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg mb-6">
+                        <div class="bg-slate-100 overflow-hidden shadow-sm sm:rounded-lg mb-6">
                             <div class="p-6">
-                                <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Foto Donasi</h3>
+                                <h3 class="text-lg font-medium text-gray-900 mb-4">Foto Donasi</h3>
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     @foreach($donation->photos as $index => $photo)
                                         <div class="relative">
@@ -50,11 +50,11 @@
                     @endif
 
                     <!-- Donation Details -->
-                    <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg mb-6">
+                    <div class="bg-slate-100 overflow-hidden shadow-sm sm:rounded-lg mb-6">
                         <div class="p-6">
                             <!-- Status Badge -->
                             <div class="mb-4">
-                                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200">
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
                                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                     </svg>
@@ -64,46 +64,46 @@
 
                             <!-- Title and Category -->
                             <div class="mb-6">
-                                <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">{{ $donation->title }}</h1>
-                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-sm font-medium bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200">
+                                <h1 class="text-3xl font-bold text-gray-900 mb-2">{{ $donation->title }}</h1>
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-sm font-medium bg-gray-100 text-gray-800">
                                     {{ $donation->category }}
                                 </span>
                             </div>
 
                             <!-- Description -->
                             <div class="mb-6">
-                                <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-3">Deskripsi</h3>
-                                <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+                                <h3 class="text-lg font-medium text-gray-900 mb-3">Deskripsi</h3>
+                                <p class="text-gray-700 leading-relaxed">
                                     {{ $donation->description ?: 'Tidak ada deskripsi tambahan untuk donasi ini.' }}
                                 </p>
                             </div>
 
                             <!-- Pickup Information -->
-                            <div class="border-t border-gray-200 dark:border-gray-700 pt-6">
-                                <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Informasi Pengambilan</h3>
+                            <div class="border-t border-gray-200 pt-6">
+                                <h3 class="text-lg font-medium text-gray-900 mb-4">Informasi Pengambilan</h3>
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div>
-                                        <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Preferensi Pengambilan</label>
+                                        <label class="block text-sm font-medium text-gray-500 mb-1">Preferensi Pengambilan</label>
                                         <div class="flex items-center">
                                             @if($donation->pickup_preference === 'self_deliver')
                                                 <svg class="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                                                 </svg>
-                                                <span class="text-gray-900 dark:text-gray-100">Donatur akan mengantar sendiri</span>
+                                                <span class="text-gray-900 ">Donatur akan mengantar sendiri</span>
                                             @else
                                                 <svg class="w-5 h-5 text-blue-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                                 </svg>
-                                                <span class="text-gray-900 dark:text-gray-100">Perlu dijemput</span>
+                                                <span class="text-gray-900 ">Perlu dijemput</span>
                                             @endif
                                         </div>
                                     </div>
                                     
                                     @if($donation->location)
                                         <div>
-                                            <label class="block text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Lokasi</label>
-                                            <p class="text-gray-900 dark:text-gray-100">{{ $donation->location }}</p>
+                                            <label class="block text-sm font-medium text-gray-500 mb-1">Lokasi</label>
+                                            <p class="text-gray-900 ">{{ $donation->location }}</p>
                                         </div>
                                     @endif
                                 </div>
@@ -115,18 +115,18 @@
                 <!-- Sidebar -->
                 <div class="space-y-6">
                     <!-- Donatur Information -->
-                    <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                    <div class="bg-slate-100 overflow-hidden shadow-sm sm:rounded-lg">
                         <div class="p-6">
-                            <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Informasi Donatur</h3>
+                            <h3 class="text-lg font-medium text-gray-900 mb-4">Informasi Donatur</h3>
                             <div class="flex items-center mb-4">
-                                <div class="w-12 h-12 bg-gray-300 dark:bg-gray-600 rounded-full flex items-center justify-center">
-                                    <span class="text-lg font-medium text-gray-700 dark:text-gray-300">
+                                <div class="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center">
+                                    <span class="text-lg font-medium text-gray-700">
                                         {{ substr($donation->user->name ?? 'U', 0, 1) }}
                                     </span>
                                 </div>
                                 <div class="ml-3">
-                                    <h4 class="text-sm font-medium text-gray-900 dark:text-gray-100">{{ $donation->user->name ?? 'Unknown User' }}</h4>
-                                    <p class="text-sm text-gray-500 dark:text-gray-400">Donatur</p>
+                                    <h4 class="text-sm font-medium text-gray-900 ">{{ $donation->user->name ?? 'Unknown User' }}</h4>
+                                    <p class="text-sm text-gray-500">Donatur</p>
                                 </div>
                             </div>
 
@@ -134,7 +134,7 @@
                             @if($donation->user && $donation->user->email)
                                 <a 
                                     href="mailto:{{ $donation->user->email }}?subject=Koordinasi Pengambilan Donasi: {{ $donation->title }}&body=Halo {{ $donation->user->name }}, saya tertarik dengan donasi '{{ $donation->title }}' yang Anda posting. Mohon koordinasi untuk pengambilan donasi ini. Terima kasih." 
-                                    class="w-full inline-flex justify-center items-center px-4 py-2 border border-gray-300 dark:border-gray-600 shadow-sm text-sm font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700"
+                                    class="w-full inline-flex justify-center items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-slate-100 hover:bg-gray-50"
                                 >
                                     <svg class="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.25a1 1 0 00.22 0L19 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
@@ -146,31 +146,31 @@
                     </div>
 
                     <!-- Donation Meta -->
-                    <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                    <div class="bg-slate-100 overflow-hidden shadow-sm sm:rounded-lg">
                         <div class="p-6">
-                            <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Detail Donasi</h3>
+                            <h3 class="text-lg font-medium text-gray-900 mb-4">Detail Donasi</h3>
                             <div class="space-y-3">
                                 <div class="flex justify-between">
-                                    <span class="text-sm text-gray-500 dark:text-gray-400">Diposting:</span>
-                                    <span class="text-sm text-gray-900 dark:text-gray-100">{{ $donation->created_at->format('d M Y, H:i') }}</span>
+                                    <span class="text-sm text-gray-500">Diposting:</span>
+                                    <span class="text-sm text-gray-900 ">{{ $donation->created_at->format('d M Y, H:i') }}</span>
                                 </div>
                                 <div class="flex justify-between">
-                                    <span class="text-sm text-gray-500 dark:text-gray-400">Kategori:</span>
-                                    <span class="text-sm text-gray-900 dark:text-gray-100">{{ $donation->category }}</span>
+                                    <span class="text-sm text-gray-500">Kategori:</span>
+                                    <span class="text-sm text-gray-900 ">{{ $donation->category }}</span>
                                 </div>
                                 <div class="flex justify-between">
-                                    <span class="text-sm text-gray-500 dark:text-gray-400">Status:</span>
-                                    <span class="text-sm text-green-600 dark:text-green-400 font-medium">Tersedia</span>
+                                    <span class="text-sm text-gray-500">Status:</span>
+                                    <span class="text-sm text-green-600 font-medium">Tersedia</span>
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Claim Action -->
-                    <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                    <div class="bg-slate-100 overflow-hidden shadow-sm sm:rounded-lg">
                         <div class="p-6">
-                            <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Klaim Donasi</h3>
-                            <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                            <h3 class="text-lg font-medium text-gray-900 mb-4">Klaim Donasi</h3>
+                            <p class="text-sm text-gray-600 mb-4">
                                 Dengan mengklaim donasi ini, Anda berkomitmen untuk mengambil dan menggunakan donasi sesuai dengan tujuan organisasi.
                             </p>
                             
@@ -207,13 +207,13 @@
 
     <!-- Image Modal -->
     <div id="imageModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50 hidden">
-        <div class="relative top-20 mx-auto p-5 border w-11/12 md:w-3/4 lg:w-1/2 shadow-lg rounded-md bg-white dark:bg-gray-800">
+        <div class="relative top-20 mx-auto p-5 border w-11/12 md:w-3/4 lg:w-1/2 shadow-lg rounded-md bg-slate-100">
             <div class="mt-3">
                 <div class="flex justify-between items-center mb-4">
-                    <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100" id="modalTitle">Foto Donasi</h3>
+                    <h3 class="text-lg font-medium text-gray-900 " id="modalTitle">Foto Donasi</h3>
                     <button 
                         onclick="closeImageModal()" 
-                        class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
+                        class="text-gray-400 hover:text-gray-600"
                     >
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>

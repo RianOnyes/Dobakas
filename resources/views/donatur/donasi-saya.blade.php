@@ -10,12 +10,20 @@
                 </div>
             @endif
 
+            <!-- Page Header -->
+            <div class="bg-slate-100 overflow-hidden shadow-sm sm:rounded-lg mb-6">
+                <div class="p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Donasi Saya</h3>
+                    <p class="text-gray-600 dark:text-gray-400">Kelola dan pantau status donasi yang telah Anda buat.</p>
+                </div>
+            </div>
+
             <!-- Header with Actions -->
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg mb-6">
+            <div class="bg-slate-100 overflow-hidden shadow-sm sm:rounded-lg mb-6">
                 <div class="p-6">
                     <div class="flex flex-col md:flex-row md:items-center md:justify-between">
                         <div>
-                            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">Donasi Aktif Saya</h3>
+                            <h3 class="text-lg font-semibold text-gray-900 mb-2">Donasi Aktif Saya</h3>
                             <p class="text-gray-600 dark:text-gray-400">Kelola donasi yang sedang berlangsung dan belum selesai.</p>
                         </div>
                         <div class="mt-4 md:mt-0">
@@ -34,7 +42,7 @@
             <!-- Filter Tabs -->
             <div class="mb-6">
                 <div class="sm:hidden">
-                    <select class="block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100">
+                    <select class="block w-full rounded-md border-gray-300 ">
                         <option>Semua Status</option>
                         <option>Menunggu Verifikasi</option>
                         <option>Tersedia</option>
@@ -67,10 +75,21 @@
             @if($donations->count() > 0)
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
                     @foreach($donations as $donation)
-                        <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                            <!-- Donation Image -->
+                        <div class="bg-slate-100 overflow-hidden shadow-sm sm:rounded-lg">
+                            <!-- Donation Image/Icon -->
                             <div class="aspect-w-16 aspect-h-9 bg-gray-200 dark:bg-gray-700">
-                                @if($donation->photos && count($donation->photos) > 0)
+                                @if($donation->donation_type === 'money')
+                                    <div class="w-full h-48 flex items-center justify-center bg-gradient-to-br from-blue-100 to-indigo-200 dark:from-blue-900 dark:to-indigo-900">
+                                        <div class="text-center">
+                                            <svg class="h-16 w-16 text-blue-600 dark:text-blue-400 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                            </svg>
+                                            <p class="text-2xl font-bold text-blue-600 dark:text-blue-400">
+                                                Rp {{ number_format($donation->amount, 0, ',', '.') }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                @elseif($donation->photos && count($donation->photos) > 0)
                                     <img src="{{ asset('storage/' . $donation->photos[0]) }}" 
                                          alt="{{ $donation->title }}"
                                          class="w-full h-48 object-cover">
@@ -95,7 +114,7 @@
                                 </div>
 
                                 <!-- Title and Category -->
-                                <h4 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
+                                <h4 class="text-lg font-semibold text-gray-900 mb-2">
                                     {{ $donation->title }}
                                 </h4>
                                 <p class="text-sm text-indigo-600 dark:text-indigo-400 mb-3">
@@ -109,13 +128,30 @@
                                     </p>
                                 @endif
 
-                                <!-- Pickup Preference -->
-                                <div class="flex items-center text-sm text-gray-500 dark:text-gray-400 mb-4">
-                                    <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                    </svg>
-                                    {{ $donation->pickup_preference_label }}
-                                </div>
+                                <!-- Donation Type Specific Info -->
+                                @if($donation->donation_type === 'money')
+                                    <div class="flex items-center text-sm text-gray-500 dark:text-gray-400 mb-4">
+                                        <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
+                                        </svg>
+                                        {{ match($donation->payment_method) {
+                                            'bank_transfer' => 'Transfer Bank',
+                                            'e_wallet' => 'E-Wallet',
+                                            'cash' => 'Tunai',
+                                            default => 'Payment Method'
+                                        } }}
+                                        @if($donation->is_anonymous)
+                                            <span class="ml-2 text-xs bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">Anonim</span>
+                                        @endif
+                                    </div>
+                                @else
+                                    <div class="flex items-center text-sm text-gray-500 dark:text-gray-400 mb-4">
+                                        <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                        </svg>
+                                        {{ $donation->pickup_preference_label }}
+                                    </div>
+                                @endif
 
                                 <!-- Claimed By (if applicable) -->
                                 @if($donation->claimedByOrganization)
@@ -155,19 +191,19 @@
                 </div>
 
                 <!-- Pagination -->
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="bg-slate-100 overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6">
                         {{ $donations->appends(request()->query())->links() }}
                     </div>
                 </div>
             @else
                 <!-- Empty State -->
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="bg-slate-100 overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-12 text-center">
                         <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
                         </svg>
-                        <h3 class="mt-4 text-lg font-medium text-gray-900 dark:text-gray-100">Belum ada donasi</h3>
+                        <h3 class="mt-4 text-lg font-medium text-gray-900 ">Belum ada donasi</h3>
                         <p class="mt-2 text-gray-600 dark:text-gray-400">
                             @if(request('status'))
                                 Tidak ada donasi dengan status "{{ request('status') }}" ditemukan.

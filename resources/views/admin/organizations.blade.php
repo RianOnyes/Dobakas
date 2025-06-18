@@ -9,8 +9,16 @@
                 </div>
             @endif
 
+            <!-- Page Header -->
+            <div class="bg-slate-100 overflow-hidden shadow-sm sm:rounded-lg mb-6">
+                <div class="p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Kelola Organisasi</h3>
+                    <p class="text-gray-600">Kelola akun organisasi, verifikasi, dan status keanggotaan.</p>
+                </div>
+            </div>
+
             <!-- Filters and Search -->
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg mb-6">
+            <div class="bg-slate-100 overflow-hidden shadow-sm sm:rounded-lg mb-6">
                 <div class="p-6">
                     <form method="GET" action="{{ route('admin.organizations') }}" class="flex flex-col sm:flex-row gap-4">
                         <!-- Search -->
@@ -20,7 +28,7 @@
                                 name="search" 
                                 value="{{ $search }}"
                                 placeholder="Cari nama organisasi, deskripsi, atau email..." 
-                                class="w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 shadow-sm focus:border-berkah-teal focus:ring-berkah-teal"
+                                class="w-full bg-slate-200 rounded-md border-gray-300 shadow-sm focus:border-berkah-teal focus:ring-berkah-teal"
                             >
                         </div>
 
@@ -28,7 +36,7 @@
                         <div class="sm:w-40">
                             <select 
                                 name="status" 
-                                class="w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 shadow-sm focus:border-berkah-teal focus:ring-berkah-teal"
+                                class="w-full rounded-md border-gray-300 shadow-sm focus:border-berkah-teal focus:ring-berkah-teal"
                             >
                                 <option value="">Semua Status</option>
                                 <option value="verified" {{ $status === 'verified' ? 'selected' : '' }}>Terverifikasi</option>
@@ -58,48 +66,48 @@
             </div>
 
             <!-- Organizations Table -->
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+            <div class="bg-slate-100 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6">
                     <div class="flex items-center justify-between mb-4">
-                        <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">Daftar Organisasi</h3>
-                        <div class="text-sm text-gray-500 dark:text-gray-400">
+                        <h3 class="text-lg font-medium text-gray-900 ">Daftar Organisasi</h3>
+                        <div class="text-sm text-gray-500">
                             Total: {{ $organizationUsers->total() }} organisasi
                         </div>
                     </div>
                     
                     <div class="overflow-x-auto">
-                        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                            <thead class="bg-gray-50 dark:bg-gray-700">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-berkah-cream/30">
                                 <tr>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Organisasi</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Kontak</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Lokasi</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Status</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Bergabung</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Aksi</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Organisasi</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kontak</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Lokasi</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Bergabung</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
                                 </tr>
                             </thead>
-                            <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                            <tbody class="bg-white/50 divide-y divide-gray-200">
                                 @forelse($organizationUsers as $user)
-                                <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
+                                <tr class="hover:bg-gray-50">
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="flex items-center">
                                             <div class="flex-shrink-0 h-12 w-12">
                                                 @if($user->organizationDetail && $user->organizationDetail->logo)
                                                 <img class="h-12 w-12 rounded-lg object-cover" src="{{ asset('storage/' . $user->organizationDetail->logo) }}" alt="">
                                                 @else
-                                                <div class="h-12 w-12 bg-gray-300 dark:bg-gray-600 rounded-lg flex items-center justify-center">
-                                                    <span class="text-sm font-medium text-gray-700 dark:text-gray-300">
+                                                <div class="h-12 w-12 bg-gray-300 rounded-lg flex items-center justify-center">
+                                                    <span class="text-sm font-medium text-gray-700">
                                                         {{ substr($user->organizationDetail ? $user->organizationDetail->organization_name : $user->name, 0, 2) }}
                                                     </span>
                                                 </div>
                                                 @endif
                                             </div>
                                             <div class="ml-4">
-                                                <div class="text-sm font-medium text-gray-900 dark:text-gray-100">
+                                                <div class="text-sm font-medium text-gray-900 ">
                                                     {{ $user->organizationDetail ? $user->organizationDetail->organization_name : $user->name }}
                                                 </div>
-                                                <div class="text-sm text-gray-500 dark:text-gray-300">
+                                                <div class="text-sm text-gray-500">
                                                     @if($user->organizationDetail && $user->organizationDetail->description)
                                                         {{ Str::limit($user->organizationDetail->description, 50) }}
                                                     @else
@@ -110,14 +118,17 @@
                                         </div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm font-medium text-gray-900 dark:text-gray-100">{{ $user->name }}</div>
-                                        <div class="text-sm text-gray-500 dark:text-gray-300">{{ $user->email }}</div>
+                                        <div class="text-sm font-medium text-gray-900 ">{{ $user->name }}</div>
+                                        <div class="text-sm text-gray-500">{{ $user->email }}</div>
                                         @if($user->organizationDetail && $user->organizationDetail->contact_phone)
-                                        <div class="text-sm text-gray-500 dark:text-gray-300">{{ $user->organizationDetail->contact_phone }}</div>
+                                        <div class="text-sm text-gray-900 ">
+                                            {{ $user->organizationDetail->contact_phone }}
+                                        </div>
                                         @endif
                                     </td>
+                                    
                                     <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm text-gray-900 dark:text-gray-100">
+                                        <div class="text-sm text-gray-900 ">
                                             @if($user->organizationDetail && $user->organizationDetail->organization_address)
                                                 {{ $user->organizationDetail->organization_address }}
                                             @else
@@ -143,7 +154,7 @@
                                         </span>
                                         @endif
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                         {{ $user->created_at->format('d M Y') }}
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
@@ -201,7 +212,7 @@
                                 </tr>
                                 @empty
                                 <tr>
-                                    <td colspan="6" class="px-6 py-4 whitespace-nowrap text-center text-gray-500 dark:text-gray-400">
+                                    <td colspan="6" class="px-6 py-4 whitespace-nowrap text-center text-gray-500">
                                         Tidak ada organisasi ditemukan
                                     </td>
                                 </tr>

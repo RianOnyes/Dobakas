@@ -19,6 +19,10 @@ class Donation extends Model
         'pickup_preference',
         'location',
         'claimed_by_organization_id',
+        'donation_type',
+        'amount',
+        'payment_method',
+        'is_anonymous',
     ];
 
     protected $casts = [
@@ -79,12 +83,12 @@ class Donation extends Model
     public function getStatusBadgeColorAttribute()
     {
         return match($this->status) {
-            'pending' => 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200',
-            'available' => 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200',
-            'claimed' => 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200',
-            'completed' => 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200',
-            'cancelled' => 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200',
-            default => 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200'
+            'pending' => 'bg-yellow-100 text-yellow-800',
+            'available' => 'bg-green-100 text-green-800',
+            'claimed' => 'bg-blue-100 text-blue-800',
+            'completed' => 'bg-gray-100 text-gray-800',
+            'cancelled' => 'bg-red-100 text-red-800',
+            default => 'bg-gray-100 text-gray-800'
         };
     }
 
@@ -121,12 +125,12 @@ class Donation extends Model
     public function getStatusBadgeClass()
     {
         return match($this->status) {
-            'pending' => 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200',
-            'available' => 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200',
-            'claimed' => 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200',
-            'completed' => 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200',
-            'cancelled' => 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200',
-            default => 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200'
+            'pending' => 'bg-yellow-100 text-yellow-800',
+            'available' => 'bg-green-100 text-green-800',
+            'claimed' => 'bg-blue-100 text-blue-800',
+            'completed' => 'bg-gray-100 text-gray-800',
+            'cancelled' => 'bg-red-100 text-red-800',
+            default => 'bg-gray-100 text-gray-800'
         };
     }
 

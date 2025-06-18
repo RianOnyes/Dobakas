@@ -66,10 +66,10 @@ class DonationRequest extends Model
     public function getStatusBadgeClass()
     {
         return match($this->status) {
-            'active' => 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200',
-            'fulfilled' => 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200',
-            'cancelled' => 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200',
-            default => 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200'
+            'active' => 'bg-green-100 text-green-800',
+            'fulfilled' => 'bg-blue-100 text-blue-800',
+            'cancelled' => 'bg-red-100 text-red-800',
+            default => 'bg-gray-100 text-gray-800'
         };
     }
 
@@ -92,10 +92,10 @@ class DonationRequest extends Model
     public function getUrgencyBadgeClass()
     {
         return match($this->urgency_level) {
-            'low' => 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200',
-            'medium' => 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200',
-            'high' => 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200',
-            default => 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200'
+            'low' => 'bg-gray-100 text-gray-800',
+            'medium' => 'bg-yellow-100 text-yellow-800',
+            'high' => 'bg-red-100 text-red-800',
+            default => 'bg-gray-100 text-gray-800'
         };
     }
 

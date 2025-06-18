@@ -62,11 +62,27 @@ class DonaturController extends Controller
     }
 
     /**
-     * Show the create donation form.
+     * Show the donation type selection page.
+     */
+    public function selectDonationType()
+    {
+        return view('donatur.select-donation-type');
+    }
+
+    /**
+     * Show the create donation form for goods (existing functionality).
      */
     public function createDonation()
     {
         return view('donatur.create-donation');
+    }
+
+    /**
+     * Show the create money donation form.
+     */
+    public function createMoneyDonation()
+    {
+        return view('donatur.create-money-donation');
     }
 
     /**
@@ -100,10 +116,39 @@ class DonaturController extends Controller
             'pickup_preference' => $validated['pickup_preference'],
             'location' => $validated['location'] ?? auth()->user()->address ?? null,
             'photos' => $photoPaths,
-            'status' => 'pending'
+            'status' => 'pending',
+            'donation_type' => 'goods'
         ]);
 
-        return redirect()->route('donatur.donasi-saya')->with('success', 'Donasi berhasil dibuat dan sedang menunggu verifikasi admin.');
+        return redirect()->route('donatur.buat-donasi')->with('success', 'Donasi barang berhasil dibuat dan sedang menunggu verifikasi admin.');
+    }
+
+    /**
+     * Store a new money donation.
+     */
+    public function storeMoneyDonation(Request $request)
+    {
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'amount' => 'required|numeric|min:10000',
+            'description' => 'nullable|string',
+            'payment_method' => 'required|in:bank_transfer,e_wallet,cash',
+            'anonymous' => 'nullable|boolean'
+        ]);
+
+        Donation::create([
+            'user_id' => auth()->id(),
+            'title' => $validated['title'],
+            'description' => $validated['description'],
+            'category' => 'Donasi Uang',
+            'amount' => $validated['amount'],
+            'payment_method' => $validated['payment_method'],
+            'is_anonymous' => $validated['anonymous'] ?? false,
+            'status' => 'pending',
+            'donation_type' => 'money'
+        ]);
+
+        return redirect()->route('donatur.buat-donasi')->with('success', 'Donasi uang berhasil dibuat dan sedang menunggu verifikasi admin.');
     }
 
     /**
