@@ -75,9 +75,9 @@
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <span
                                                 class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                                                    @if($user->role === 'admin') bg-red-100 text-red-800 dark:bg-red-800 dark:text-red-100
-                                                    @elseif($user->role === 'donatur') bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100
-                                                    @else bg-purple-100 text-purple-800 dark:bg-purple-800 dark:text-purple-100 @endif">
+                                                    @if($user->role === 'admin') bg-red-100 text-red-800 
+                                                    @elseif($user->role === 'donatur') bg-green-100 text-green-800 
+                                                    @else bg-purple-100 text-purple-800 @endif">
                                                 {{ ucfirst($user->role) }}
                                             </span>
                                         </td>
