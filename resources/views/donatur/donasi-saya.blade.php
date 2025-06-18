@@ -14,7 +14,7 @@
             <div class="bg-slate-100 overflow-hidden shadow-sm sm:rounded-lg mb-6">
                 <div class="p-6">
                     <h3 class="text-lg font-semibold text-gray-900 mb-2">Donasi Saya</h3>
-                    <p class="text-gray-600 dark:text-gray-400">Kelola dan pantau status donasi yang telah Anda buat.</p>
+                    <p class="text-gray-600">Kelola dan pantau status donasi yang telah Anda buat.</p>
                 </div>
             </div>
 
@@ -24,7 +24,7 @@
                     <div class="flex flex-col md:flex-row md:items-center md:justify-between">
                         <div>
                             <h3 class="text-lg font-semibold text-gray-900 mb-2">Donasi Aktif Saya</h3>
-                            <p class="text-gray-600 dark:text-gray-400">Kelola donasi yang sedang berlangsung dan belum selesai.</p>
+                            <p class="text-gray-600">Kelola donasi yang sedang berlangsung dan belum selesai.</p>
                         </div>
                         <div class="mt-4 md:mt-0">
                             <a href="{{ route('donatur.buat-donasi') }}" 
@@ -77,9 +77,9 @@
                     @foreach($donations as $donation)
                         <div class="bg-slate-100 overflow-hidden shadow-sm sm:rounded-lg">
                             <!-- Donation Image/Icon -->
-                            <div class="aspect-w-16 aspect-h-9 bg-gray-200 dark:bg-gray-700">
+                            <div class="aspect-w-16 aspect-h-9 bg-gray-200">
                                 @if($donation->donation_type === 'money')
-                                    <div class="w-full h-48 flex items-center justify-center bg-gradient-to-br from-blue-100 to-indigo-200 dark:from-blue-900 dark:to-indigo-900">
+                                    <div class="w-full h-48 flex items-center justify-center bg-gradient-to-br from-blue-100 to-indigo-200">
                                         <div class="text-center">
                                             <svg class="h-16 w-16 text-blue-600 dark:text-blue-400 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
@@ -108,7 +108,7 @@
                                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $donation->status_badge_color }}">
                                         {{ $donation->status_label }}
                                     </span>
-                                    <span class="text-xs text-gray-500 dark:text-gray-400">
+                                    <span class="text-xs text-gray-500">
                                         {{ $donation->created_at->diffForHumans() }}
                                     </span>
                                 </div>
@@ -117,20 +117,20 @@
                                 <h4 class="text-lg font-semibold text-gray-900 mb-2">
                                     {{ $donation->title }}
                                 </h4>
-                                <p class="text-sm text-indigo-600 dark:text-indigo-400 mb-3">
+                                <p class="text-sm text-indigo-600 mb-3">
                                     {{ $donation->category }}
                                 </p>
 
                                 <!-- Description -->
                                 @if($donation->description)
-                                    <p class="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-2">
+                                    <p class="text-gray-600 text-sm mb-4 line-clamp-2">
                                         {{ Str::limit($donation->description, 100) }}
                                     </p>
                                 @endif
 
                                 <!-- Donation Type Specific Info -->
                                 @if($donation->donation_type === 'money')
-                                    <div class="flex items-center text-sm text-gray-500 dark:text-gray-400 mb-4">
+                                    <div class="flex items-center text-sm text-gray-500 mb-4">
                                         <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
                                         </svg>
@@ -145,7 +145,7 @@
                                         @endif
                                     </div>
                                 @else
-                                    <div class="flex items-center text-sm text-gray-500 dark:text-gray-400 mb-4">
+                                    <div class="flex items-center text-sm text-gray-500 mb-4">
                                         <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                                         </svg>
@@ -155,11 +155,11 @@
 
                                 <!-- Claimed By (if applicable) -->
                                 @if($donation->claimedByOrganization)
-                                    <div class="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-3 mb-4">
-                                        <p class="text-sm font-medium text-blue-900 dark:text-blue-300 mb-1">
+                                    <div class="bg-blue-50 rounded-lg p-3 mb-4">
+                                        <p class="text-sm font-medium text-blue-900 mb-1">
                                             Diklaim oleh:
                                         </p>
-                                        <p class="text-sm text-blue-700 dark:text-blue-400">
+                                        <p class="text-sm text-blue-700">
                                             {{ $donation->claimedByOrganization->organizationDetail->organization_name ?? $donation->claimedByOrganization->name }}
                                         </p>
                                     </div>
@@ -204,7 +204,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
                         </svg>
                         <h3 class="mt-4 text-lg font-medium text-gray-900 ">Belum ada donasi</h3>
-                        <p class="mt-2 text-gray-600 dark:text-gray-400">
+                        <p class="mt-2 text-gray-600">
                             @if(request('status'))
                                 Tidak ada donasi dengan status "{{ request('status') }}" ditemukan.
                             @else
@@ -213,7 +213,7 @@
                         </p>
                         <div class="mt-6">
                             <a href="{{ route('donatur.buat-donasi') }}" 
-                               class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-indigo-700 bg-indigo-100 hover:bg-indigo-200 dark:bg-indigo-900 dark:text-indigo-300 dark:hover:bg-indigo-800">
+                                class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-indigo-700 bg-indigo-100 hover:bg-indigo-200">
                                 <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                                 </svg>
