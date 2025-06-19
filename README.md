@@ -163,17 +163,17 @@ Aplikasi akan berjalan di: `http://localhost:8000`
 Setelah menjalankan seeder, Anda dapat menggunakan akun berikut untuk testing:
 
 ### Admin
-- **Email:** admin@berkahbabe.com
+- **Email:** admin@donasibarang.com
 - **Password:** password123
 - **Role:** Administrator
 
 ### Donatur
-- **Email:** donatur@example.com
+- **Email:** donatur@donasibarang.com
 - **Password:** password123
 - **Role:** Donatur
 
 ### Organisasi
-- **Email:** organisasi@example.com
+- **Email:** organisasi@donasibarang.com
 - **Password:** password123
 - **Role:** Organisasi
 
@@ -248,7 +248,7 @@ npm run build
 Untuk mendapatkan update terbaru:
 
 ```bash
-git pull origin main
+git pull origin master
 composer install
 npm install
 php artisan migrate
