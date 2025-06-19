@@ -405,20 +405,16 @@
                                 <tbody class="bg-white/50 divide-y divide-gray-200">
                                     @forelse($topDonatur as $index => $donatur)
                                         <tr>
-                                            <td
-                                                class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 ">
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 ">
                                                 {{ $index + 1 }}
                                             </td>
-                                            <td
-                                                class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 ">
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 ">
                                                 {{ $donatur->name }}
                                             </td>
-                                            <td
-                                                class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                                 {{ $donatur->email }}
                                             </td>
-                                            <td
-                                                class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 ">
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 ">
                                                 {{ $donatur->donations_count }}
                                             </td>
                                         </tr>
@@ -487,20 +483,16 @@
                                 <tbody class="bg-white/50 divide-y divide-gray-200">
                                     @forelse($topOrganizations as $index => $org)
                                         <tr>
-                                            <td
-                                                class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 ">
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 ">
                                                 {{ $index + 1 }}
                                             </td>
-                                            <td
-                                                class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 ">
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 ">
                                                 {{ $org->name }}
                                             </td>
-                                            <td
-                                                class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                                 {{ $org->email }}
                                             </td>
-                                            <td
-                                                class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 ">
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 ">
                                                 {{ $org->donations_count ?? 0 }}
                                             </td>
                                         </tr>
@@ -573,8 +565,7 @@
                             <tbody class="bg-white/50 divide-y divide-gray-200">
                                 @forelse($recentActivities as $activity)
                                     <tr>
-                                        <td
-                                            class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 ">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 ">
                                             {{ Str::limit($activity['message'] ?? 'Unknown Activity', 40) }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
@@ -592,7 +583,8 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="4" class="px-6 py-4 text-center text-gray-500"> Belum ada aktivitas terbaru.</td>
+                                        <td colspan="4" class="px-6 py-4 text-center text-gray-500"> Belum ada aktivitas
+                                            terbaru.</td>
                                     </tr>
                                 @endforelse
                             </tbody>

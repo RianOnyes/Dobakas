@@ -55,28 +55,28 @@ class AdminController extends Controller
         // Debug: Check if we have any data at all
         $totalDonationsCount = Donation::count();
         $totalUsersCount = User::count();
-        
+
         \Log::info('Before sample data creation:', [
             'totalDonationsCount' => $totalDonationsCount,
             'totalUsersCount' => $totalUsersCount
         ]);
-        
+
         // If no data exists, create some sample data for testing
         if ($totalDonationsCount == 0 || $totalUsersCount <= 1) { // Allow for admin user
             \Log::info('Creating sample data because counts are low');
             $this->createSampleData();
             $totalDonationsCount = Donation::count();
             $totalUsersCount = User::count();
-            
+
             \Log::info('After sample data creation:', [
                 'totalDonationsCount' => $totalDonationsCount,
                 'totalUsersCount' => $totalUsersCount
             ]);
-            
+
             // Re-apply date filtering after creating sample data
             $query = $this->applyDateFilter($period, $startDate, $endDate);
         }
-        
+
         // Monthly donation trends (based on selected period)
         $monthlyDonations = $this->getMonthlyDonations($query['donations']);
 
@@ -91,13 +91,13 @@ class AdminController extends Controller
         $totalUsers = User::count();
         $totalDonatur = User::where('role', 'donatur')->count();
         $totalOrganisasi = User::where('role', 'organisasi')->count();
-        
+
         // Recalculate donations by status after potential sample data creation
         $statusCounts = Donation::selectRaw('status, COUNT(*) as count')
             ->groupBy('status')
             ->get()
             ->pluck('count', 'status');
-        
+
         // Ensure all status keys exist with default values
         $donationsByStatus = collect([
             'pending' => 0,
@@ -114,17 +114,17 @@ class AdminController extends Controller
             'total_donatur' => $totalDonatur,
             'total_organisasi' => $totalOrganisasi,
             'new_users_this_period' => $query['users']->count(),
-            
+
             // Donation statistics
             'total_donations' => $query['donations']->count(),
             'pending_donations' => $donationsByStatus['pending'],
             'available_donations' => $donationsByStatus['available'],
             'completed_donations' => $donationsByStatus['completed'],
             'cancelled_donations' => $donationsByStatus['cancelled'],
-            
+
             // Organization statistics
             'total_organizations' => $query['organizations']->count(),
-            'verified_organizations' => $query['organizations']->whereHas('user', function($q) {
+            'verified_organizations' => $query['organizations']->whereHas('user', function ($q) {
                 $q->whereNotNull('email_verified_at');
             })->count(),
         ];
@@ -146,7 +146,7 @@ class AdminController extends Controller
             ->where('donations.status', 'completed')
             ->whereNotNull('donations.claimed_by_organization_id')
             ->whereNotNull('organization_details.organization_name')
-            ->when($period !== 'all', function($q) use ($query) {
+            ->when($period !== 'all', function ($q) use ($query) {
                 // Apply same date filtering to joined table
                 $dates = $this->getDateRange($period ?? 'all', request('start_date'), request('end_date'));
                 if ($dates['start'] && $dates['end']) {
@@ -163,7 +163,7 @@ class AdminController extends Controller
             ->join('users', 'donations.user_id', '=', 'users.id')
             ->select('users.name', 'users.email', DB::raw('COUNT(*) as donations_count'))
             ->where('donations.status', 'completed')
-            ->when($period !== 'all', function($q) use ($query) {
+            ->when($period !== 'all', function ($q) use ($query) {
                 $dates = $this->getDateRange($period ?? 'all', request('start_date'), request('end_date'));
                 if ($dates['start'] && $dates['end']) {
                     $q->whereBetween('donations.created_at', [$dates['start'], $dates['end']]);
@@ -176,123 +176,123 @@ class AdminController extends Controller
 
         // Recent activities - combine different types of activities
         $recentActivities = collect();
-        
+
         try {
 
-        // Recent donations (new donations submitted)
-        $newDonations = $query['donations']
-            ->with('user')
-            ->whereHas('user')
-            ->whereNotNull('created_at')
-            ->latest()
-            ->limit(5)
-            ->get()
-            ->filter(function($donation) {
-                return $donation->user && $donation->user->name;
-            })
-            ->map(function($donation) {
-                return [
-                    'type' => 'donation_created',
-                    'message' => "{$donation->user->name} mengirim donasi baru",
-                    'details' => $donation->title,
-                    'user_name' => $donation->user->name,
-                    'user_role' => $donation->user->role,
-                    'created_at' => $donation->created_at,
-                    'status' => $donation->status,
-                    'icon' => 'gift'
-                ];
-            });
+            // Recent donations (new donations submitted)
+            $newDonations = $query['donations']
+                ->with('user')
+                ->whereHas('user')
+                ->whereNotNull('created_at')
+                ->latest()
+                ->limit(5)
+                ->get()
+                ->filter(function ($donation) {
+                    return $donation->user && $donation->user->name;
+                })
+                ->map(function ($donation) {
+                    return [
+                        'type' => 'donation_created',
+                        'message' => "{$donation->user->name} mengirim donasi baru",
+                        'details' => $donation->title,
+                        'user_name' => $donation->user->name,
+                        'user_role' => $donation->user->role,
+                        'created_at' => $donation->created_at,
+                        'status' => $donation->status,
+                        'icon' => 'gift'
+                    ];
+                });
 
-        // Recent donation status changes (claimed donations)
-        $claimedDonations = $query['donations']
-            ->with(['user', 'claimedByOrganization'])
-            ->whereHas('user')
-            ->whereHas('claimedByOrganization')
-            ->where('status', 'claimed')
-            ->whereNotNull('created_at')
-            ->latest('updated_at')
-            ->limit(3)
-            ->get()
-            ->filter(function($donation) {
-                return $donation->user && $donation->user->name && 
-                       $donation->claimedByOrganization && $donation->claimedByOrganization->name;
-            })
-            ->map(function($donation) {
-                return [
-                    'type' => 'donation_claimed',
-                    'message' => "{$donation->claimedByOrganization->name} mengklaim donasi",
-                    'details' => $donation->title,
-                    'user_name' => $donation->claimedByOrganization->name,
-                    'user_role' => $donation->claimedByOrganization->role,
-                    'created_at' => $donation->updated_at,
-                    'status' => $donation->status,
-                    'icon' => 'hand'
-                ];
-            });
+            // Recent donation status changes (claimed donations)
+            $claimedDonations = $query['donations']
+                ->with(['user', 'claimedByOrganization'])
+                ->whereHas('user')
+                ->whereHas('claimedByOrganization')
+                ->where('status', 'claimed')
+                ->whereNotNull('created_at')
+                ->latest('updated_at')
+                ->limit(3)
+                ->get()
+                ->filter(function ($donation) {
+                    return $donation->user && $donation->user->name &&
+                        $donation->claimedByOrganization && $donation->claimedByOrganization->name;
+                })
+                ->map(function ($donation) {
+                    return [
+                        'type' => 'donation_claimed',
+                        'message' => "{$donation->claimedByOrganization->name} mengklaim donasi",
+                        'details' => $donation->title,
+                        'user_name' => $donation->claimedByOrganization->name,
+                        'user_role' => $donation->claimedByOrganization->role,
+                        'created_at' => $donation->updated_at,
+                        'status' => $donation->status,
+                        'icon' => 'hand'
+                    ];
+                });
 
-        // Recent user registrations
-        $newUsers = $query['users']
-            ->whereNotNull('created_at')
-            ->whereNotNull('name')
-            ->latest()
-            ->limit(3)
-            ->get()
-            ->filter(function($user) {
-                return $user->name && $user->role;
-            })
-            ->map(function($user) {
-                $roleLabel = $user->role === 'donatur' ? 'Donatur' : 'Organisasi';
-                return [
-                    'type' => 'user_registered',
-                    'message' => "{$user->name} bergabung sebagai {$roleLabel}",
-                    'details' => "Pengguna baru terdaftar",
-                    'user_name' => $user->name,
-                    'user_role' => $user->role,
-                    'created_at' => $user->created_at,
-                    'status' => $user->is_verified ? 'verified' : 'unverified',
-                    'icon' => 'user-plus'
-                ];
-            });
+            // Recent user registrations
+            $newUsers = $query['users']
+                ->whereNotNull('created_at')
+                ->whereNotNull('name')
+                ->latest()
+                ->limit(3)
+                ->get()
+                ->filter(function ($user) {
+                    return $user->name && $user->role;
+                })
+                ->map(function ($user) {
+                    $roleLabel = $user->role === 'donatur' ? 'Donatur' : 'Organisasi';
+                    return [
+                        'type' => 'user_registered',
+                        'message' => "{$user->name} bergabung sebagai {$roleLabel}",
+                        'details' => "Pengguna baru terdaftar",
+                        'user_name' => $user->name,
+                        'user_role' => $user->role,
+                        'created_at' => $user->created_at,
+                        'status' => $user->is_verified ? 'verified' : 'unverified',
+                        'icon' => 'user-plus'
+                    ];
+                });
 
-        // Recent completed donations
-        $completedDonations = $query['donations']
-            ->with(['user', 'claimedByOrganization'])
-            ->whereHas('user')
-            ->where('status', 'completed')
-            ->whereNotNull('created_at')
-            ->latest('updated_at')
-            ->limit(2)
-            ->get()
-            ->filter(function($donation) {
-                return $donation->user && $donation->title;
-            })
-            ->map(function($donation) {
-                $organizationName = 'Organisasi';
-                if ($donation->claimedByOrganization && $donation->claimedByOrganization->name) {
-                    $organizationName = $donation->claimedByOrganization->name;
-                }
-                
-                return [
-                    'type' => 'donation_completed',
-                    'message' => "Donasi diselesaikan",
-                    'details' => $donation->title,
-                    'user_name' => $organizationName,
-                    'user_role' => 'organisasi',
-                    'created_at' => $donation->updated_at,
-                    'status' => $donation->status,
-                    'icon' => 'check-circle'
-                ];
-            });
+            // Recent completed donations
+            $completedDonations = $query['donations']
+                ->with(['user', 'claimedByOrganization'])
+                ->whereHas('user')
+                ->where('status', 'completed')
+                ->whereNotNull('created_at')
+                ->latest('updated_at')
+                ->limit(2)
+                ->get()
+                ->filter(function ($donation) {
+                    return $donation->user && $donation->title;
+                })
+                ->map(function ($donation) {
+                    $organizationName = 'Organisasi';
+                    if ($donation->claimedByOrganization && $donation->claimedByOrganization->name) {
+                        $organizationName = $donation->claimedByOrganization->name;
+                    }
 
-        // Merge and sort all activities by date
-        $recentActivities = $newDonations
-            ->concat($claimedDonations)
-            ->concat($newUsers)
-            ->concat($completedDonations)
-            ->sortByDesc('created_at')
-            ->take(8)
-            ->values();
-            
+                    return [
+                        'type' => 'donation_completed',
+                        'message' => "Donasi diselesaikan",
+                        'details' => $donation->title,
+                        'user_name' => $organizationName,
+                        'user_role' => 'organisasi',
+                        'created_at' => $donation->updated_at,
+                        'status' => $donation->status,
+                        'icon' => 'check-circle'
+                    ];
+                });
+
+            // Merge and sort all activities by date
+            $recentActivities = $newDonations
+                ->concat($claimedDonations)
+                ->concat($newUsers)
+                ->concat($completedDonations)
+                ->sortByDesc('created_at')
+                ->take(8)
+                ->values();
+
         } catch (\Exception $e) {
             // If there's an error getting activities, return empty collection
             $recentActivities = collect();
@@ -307,11 +307,11 @@ class AdminController extends Controller
             ->get();
 
         // Prepare chart data with proper data fetching
-        
+
         // 1. Monthly donations data (for line chart)
         $monthlyLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
         $monthlyData = array_fill(0, 12, 0); // Initialize with zeros
-        
+
         // Fill with actual data
         foreach ($monthlyDonations as $month => $count) {
             if ($month >= 1 && $month <= 12) {
@@ -328,7 +328,7 @@ class AdminController extends Controller
 
         // 3. Category data (for bar chart) - limit to top 10 categories
         $categoryLabels = $categoryStats->take(10)->pluck('category')->toArray();
-        $categoryData = $categoryStats->take(10)->pluck('count')->map(function($count) {
+        $categoryData = $categoryStats->take(10)->pluck('count')->map(function ($count) {
             return (int) $count;
         })->toArray();
 
@@ -336,7 +336,7 @@ class AdminController extends Controller
         $donationRequestLabels = ['Pending', 'Available', 'Claimed', 'Completed', 'Cancelled'];
         $donationRequestData = [
             (int) $donationsByStatus['pending'],
-            (int) $donationsByStatus['available'], 
+            (int) $donationsByStatus['available'],
             (int) $donationsByStatus['claimed'],
             (int) $donationsByStatus['completed'],
             (int) $donationsByStatus['cancelled']
@@ -376,11 +376,11 @@ class AdminController extends Controller
         ]);
 
         return view('admin.statistics', compact(
-            'stats', 
-            'monthlyDonations', 
+            'stats',
+            'monthlyDonations',
             'monthlyUsers',
             'donationsByStatus',
-            'topCategories', 
+            'topCategories',
             'topOrganizations',
             'topDonatur',
             'recentActivities',
@@ -413,12 +413,12 @@ class AdminController extends Controller
             'Content-Disposition' => 'attachment; filename="' . $filename . '"',
         ];
 
-        $callback = function() use ($query, $period, $startDate, $endDate) {
+        $callback = function () use ($query, $period, $startDate, $endDate) {
             $file = fopen('php://output', 'w');
-            
+
             // Add BOM for UTF-8
-            fprintf($file, chr(0xEF).chr(0xBB).chr(0xBF));
-            
+            fprintf($file, chr(0xEF) . chr(0xBB) . chr(0xBF));
+
             // Header information
             fputcsv($file, ['LAPORAN STATISTIK DONASI BARANG BEKAS']);
             fputcsv($file, ['Tanggal Export:', now()->format('d/m/Y H:i:s')]);
@@ -441,8 +441,8 @@ class AdminController extends Controller
             // Donations detail
             fputcsv($file, ['DETAIL DONASI']);
             fputcsv($file, ['Judul', 'Kategori', 'Donatur', 'Status', 'Tanggal Dibuat']);
-            
-            $query['donations']->with('user')->whereHas('user')->whereNotNull('created_at')->chunk(100, function($donations) use ($file) {
+
+            $query['donations']->with('user')->whereHas('user')->whereNotNull('created_at')->chunk(100, function ($donations) use ($file) {
                 foreach ($donations as $donation) {
                     fputcsv($file, [
                         $donation->title,
@@ -459,7 +459,7 @@ class AdminController extends Controller
             // Category statistics
             fputcsv($file, ['STATISTIK KATEGORI']);
             fputcsv($file, ['Kategori', 'Jumlah Donasi']);
-            
+
             $categoryStats = $query['donations']
                 ->selectRaw('category, COUNT(*) as count')
                 ->whereNotNull('category')
@@ -476,8 +476,8 @@ class AdminController extends Controller
             // Users detail
             fputcsv($file, ['DETAIL PENGGUNA']);
             fputcsv($file, ['Nama', 'Email', 'Role', 'Verified', 'Tanggal Daftar']);
-            
-            $query['users']->chunk(100, function($users) use ($file) {
+
+            $query['users']->chunk(100, function ($users) use ($file) {
                 foreach ($users as $user) {
                     fputcsv($file, [
                         $user->name,
@@ -615,16 +615,16 @@ class AdminController extends Controller
         $search = $request->get('search');
 
         $donations = Donation::with(['user', 'claimedByOrganization'])
-            ->when($status, function($query) use ($status) {
+            ->when($status, function ($query) use ($status) {
                 return $query->where('status', $status);
             })
-            ->when($search, function($query) use ($search) {
-                return $query->where(function($q) use ($search) {
+            ->when($search, function ($query) use ($search) {
+                return $query->where(function ($q) use ($search) {
                     $q->where('title', 'like', "%{$search}%")
-                      ->orWhere('category', 'like', "%{$search}%")
-                      ->orWhereHas('user', function($userQuery) use ($search) {
-                          $userQuery->where('name', 'like', "%{$search}%");
-                      });
+                        ->orWhere('category', 'like', "%{$search}%")
+                        ->orWhereHas('user', function ($userQuery) use ($search) {
+                            $userQuery->where('name', 'like', "%{$search}%");
+                        });
                 });
             })
             ->latest()
@@ -658,20 +658,20 @@ class AdminController extends Controller
         // Get all organization users, whether they have completed organization details or not
         $organizationUsers = User::with('organizationDetail')
             ->where('role', 'organisasi')
-            ->when($search, function($query) use ($search) {
-                return $query->where(function($q) use ($search) {
+            ->when($search, function ($query) use ($search) {
+                return $query->where(function ($q) use ($search) {
                     $q->where('name', 'like', "%{$search}%")
-                      ->orWhere('email', 'like', "%{$search}%")
-                      ->orWhereHas('organizationDetail', function($orgQuery) use ($search) {
-                          $orgQuery->where('organization_name', 'like', "%{$search}%")
-                                   ->orWhere('description', 'like', "%{$search}%");
-                      });
+                        ->orWhere('email', 'like', "%{$search}%")
+                        ->orWhereHas('organizationDetail', function ($orgQuery) use ($search) {
+                            $orgQuery->where('organization_name', 'like', "%{$search}%")
+                                ->orWhere('description', 'like', "%{$search}%");
+                        });
                 });
             })
-            ->when($status === 'verified', function($query) {
+            ->when($status === 'verified', function ($query) {
                 return $query->whereNotNull('email_verified_at');
             })
-            ->when($status === 'unverified', function($query) {
+            ->when($status === 'unverified', function ($query) {
                 return $query->whereNull('email_verified_at');
             })
             ->latest()
@@ -686,7 +686,7 @@ class AdminController extends Controller
     public function showOrganization(OrganizationDetail $organization): View
     {
         $organization->load(['user']);
-        
+
         // Get donations claimed by this organization
         $claimedDonations = Donation::where('claimed_by_organization_id', $organization->user_id)
             ->with('user')
@@ -748,18 +748,19 @@ class AdminController extends Controller
             'donatur' => User::where('role', 'donatur')->count(),
             'organisasi' => User::where('role', 'organisasi')->count(),
         ];
-        
+
         $this->createSampleData();
-        
+
         $afterCounts = [
             'users' => User::count(),
             'donations' => Donation::count(),
             'donatur' => User::where('role', 'donatur')->count(),
             'organisasi' => User::where('role', 'organisasi')->count(),
         ];
-        
-        return redirect()->route('admin.statistics')->with('success', 
-            'Sample data creation attempted! Before: ' . json_encode($beforeCounts) . 
+
+        return redirect()->route('admin.statistics')->with(
+            'success',
+            'Sample data creation attempted! Before: ' . json_encode($beforeCounts) .
             ' After: ' . json_encode($afterCounts)
         );
     }
@@ -781,7 +782,7 @@ class AdminController extends Controller
             'Completed Donations' => Donation::where('status', 'completed')->count(),
             'Cancelled Donations' => Donation::where('status', 'cancelled')->count(),
         ];
-        
+
         return response()->json($counts);
     }
 
@@ -792,14 +793,14 @@ class AdminController extends Controller
     {
         try {
             \Log::info('Starting sample data creation');
-            
+
             // Check if we already have sample data to avoid duplicates
             $existingDonatur = User::where('email', 'john@example.com')->first();
             if ($existingDonatur) {
                 \Log::info('Sample data already exists, skipping creation');
                 return;
             }
-            
+
             \Log::info('Creating fresh sample data...');
             // Create sample users
             $donatur1 = User::create([
@@ -850,7 +851,7 @@ class AdminController extends Controller
             for ($i = 0; $i < 20; $i++) {
                 $createdAt = now()->subDays(rand(1, 90));
                 $status = $statuses[array_rand($statuses)];
-                
+
                 $donation = Donation::create([
                     'user_id' => rand(0, 1) ? $donatur1->id : $donatur2->id,
                     'title' => 'Donasi ' . $categories[array_rand($categories)] . ' #' . ($i + 1),
@@ -872,7 +873,7 @@ class AdminController extends Controller
                     ]);
                 }
             }
-            
+
             \Log::info('Sample data creation completed successfully');
 
         } catch (\Exception $e) {
@@ -882,4 +883,4 @@ class AdminController extends Controller
             ]);
         }
     }
-} 
+}

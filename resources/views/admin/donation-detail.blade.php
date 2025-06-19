@@ -55,7 +55,8 @@
                                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Tanggal
                                         Dibuat</label>
                                     <p class="mt-1 text-sm text-gray-900 ">
-                                        {{ $donation->created_at->format('d F Y, H:i') }}</p>
+                                        {{ $donation->created_at->format('d F Y, H:i') }}
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -75,7 +76,8 @@
                                     <label
                                         class="block text-sm font-medium text-gray-700 dark:text-gray-300">Email</label>
                                     <p class="mt-1 text-sm text-gray-900 ">
-                                        {{ $donation->user->email }}</p>
+                                        {{ $donation->user->email }}
+                                    </p>
                                 </div>
 
                                 <div>

@@ -13,7 +13,59 @@ class DonaturController extends Controller
      */
     public function dashboard()
     {
-        return view('donatur.dashboard');
+        $user = auth()->user();
+
+        // Get user's recent donations (latest 5)
+        $recentDonations = Donation::with(['claimedByOrganization'])
+            ->forUser($user->id)
+            ->latest()
+            ->limit(5)
+            ->get();
+
+        // Get detailed donation statistics
+        $stats = [
+            'total_donations' => $user->donations()->count(),
+            'pending_donations' => $user->donations()->where('status', 'pending')->count(),
+            'available_donations' => $user->donations()->where('status', 'available')->count(),
+            'claimed_donations' => $user->donations()->where('status', 'claimed')->count(),
+            'completed_donations' => $user->donations()->where('status', 'completed')->count(),
+            'cancelled_donations' => $user->donations()->where('status', 'cancelled')->count(),
+        ];
+
+        // Get suggested organizations (organizations that might be interested in user's donation categories)
+        $userCategories = $user->donations()
+            ->whereNotNull('category')
+            ->distinct()
+            ->pluck('category')
+            ->toArray();
+
+        $suggestedOrganizations = collect();
+        if (!empty($userCategories)) {
+            $suggestedOrganizations = OrganizationDetail::with('user')
+                ->withActiveUsers()
+                ->where(function ($query) use ($userCategories) {
+                    foreach ($userCategories as $category) {
+                        $query->orWhereJsonContains('needs_list', $category);
+                    }
+                })
+                ->limit(3)
+                ->get();
+        }
+
+        // Get recent activity insights
+        $activityInsights = [
+            'has_pending_donations' => $stats['pending_donations'] > 0,
+            'has_recent_activity' => $recentDonations->count() > 0,
+            'most_recent_status' => $recentDonations->first()?->status,
+            'days_since_last_donation' => $recentDonations->first()?->created_at?->diffInDays(now()),
+        ];
+
+        return view('donatur.dashboard', compact(
+            'recentDonations',
+            'stats',
+            'suggestedOrganizations',
+            'activityInsights'
+        ));
     }
 
     /**
@@ -157,15 +209,15 @@ class DonaturController extends Controller
     public function donasiSaya(Request $request)
     {
         $status = $request->get('status');
-        
+
         $donations = Donation::with(['claimedByOrganization', 'claimedByOrganization.organizationDetail'])
             ->forUser(auth()->id())
             ->active();
-            
+
         if ($status) {
             $donations->byStatus($status);
         }
-        
+
         $donations = $donations->latest()->paginate(9);
 
         return view('donatur.donasi-saya', compact('donations', 'status'));
@@ -219,4 +271,4 @@ class DonaturController extends Controller
 
         return back()->with('success', 'Donasi berhasil dibatalkan.');
     }
-} 
+}

@@ -73,11 +73,10 @@
                                             </div>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
-                                            <span
-                                                class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                                                    @if($user->role === 'admin') bg-red-100 text-red-800 
-                                                    @elseif($user->role === 'donatur') bg-green-100 text-green-800 
-                                                    @else bg-purple-100 text-purple-800 @endif">
+                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                                                            @if($user->role === 'admin') bg-red-100 text-red-800 
+                                                            @elseif($user->role === 'donatur') bg-green-100 text-green-800 
+                                                            @else bg-purple-100 text-purple-800 @endif">
                                                 {{ ucfirst($user->role) }}
                                             </span>
                                         </td>
@@ -149,4 +148,43 @@
                 confirmText="Ya, Hapus Pengguna" cancelText="Batal" confirmClass="bg-red-600 hover:bg-red-700" />
         @endif
     @endforeach
+
+    <script>
+        function showModal(modalId, form) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+                modal.dataset.form = form.id;
+            }
+        }
+
+        // Handle modal confirmations
+        document.addEventListener('click', function (e) {
+            if (e.target.matches('[data-action="confirm"]')) {
+                const modal = e.target.closest('.modal');
+                const formId = modal?.dataset.form;
+                if (formId) {
+                    document.getElementById(formId).submit();
+                }
+            } else if (e.target.matches('[data-action="cancel"]') || e.target.matches('.modal-overlay')) {
+                const modal = e.target.closest('.modal') || e.target;
+                if (modal) {
+                    modal.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                }
+            }
+        });
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
+                const modals = document.querySelectorAll('.modal[style*="flex"]');
+                modals.forEach(modal => {
+                    modal.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                });
+            }
+        });
+    </script>
 </x-dashboard-layout>
