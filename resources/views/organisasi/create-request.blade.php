@@ -33,8 +33,7 @@
 
                         <!-- Title -->
                         <div>
-                            <label for="title"
-                                class="block text-xs sm:text-sm font-medium text-gray-700 mb-2">
+                            <label for="title" class="block text-xs sm:text-sm font-medium text-gray-700 mb-2">
                                 Judul Permintaan <span class="text-red-500">*</span>
                             </label>
                             <input type="text" id="title" name="title" value="{{ old('title') }}" required
@@ -49,8 +48,7 @@
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                             <!-- Category -->
                             <div>
-                                <label for="category"
-                                    class="block text-xs sm:text-sm font-medium text-gray-700 mb-2">
+                                <label for="category" class="block text-xs sm:text-sm font-medium text-gray-700 mb-2">
                                     Kategori <span class="text-red-500">*</span>
                                 </label>
                                 <select id="category" name="category" required
@@ -103,8 +101,7 @@
 
                         <!-- Description -->
                         <div>
-                            <label for="description"
-                                class="block text-xs sm:text-sm font-medium text-gray-700 mb-2">
+                            <label for="description" class="block text-xs sm:text-sm font-medium text-gray-700 mb-2">
                                 Deskripsi <span class="text-red-500">*</span>
                             </label>
                             <textarea id="description" name="description" rows="4" required
@@ -133,8 +130,7 @@
 
                             <!-- Location -->
                             <div>
-                                <label for="location"
-                                    class="block text-xs sm:text-sm font-medium text-gray-700 mb-2">
+                                <label for="location" class="block text-xs sm:text-sm font-medium text-gray-700 mb-2">
                                     Lokasi
                                 </label>
                                 <input type="text" id="location" name="location" value="{{ old('location') }}"
@@ -148,8 +144,7 @@
 
                         <!-- Needed By Date -->
                         <div>
-                            <label for="needed_by"
-                                class="block text-xs sm:text-sm font-medium text-gray-700 mb-2">
+                            <label for="needed_by" class="block text-xs sm:text-sm font-medium text-gray-700 mb-2">
                                 Dibutuhkan Sebelum
                             </label>
                             <input type="date" id="needed_by" name="needed_by" value="{{ old('needed_by') }}"
@@ -162,27 +157,7 @@
                                 jika ada.</p>
                         </div>
 
-                        <!-- Tags -->
-                        <div>
-                            <label for="tags_input"
-                                class="block text-xs sm:text-sm font-medium text-gray-700 mb-2">
-                                Tag/Kata Kunci
-                            </label>
-                            <input type="text" id="tags_input"
-                                placeholder="Ketik tag dan tekan Enter atau koma untuk menambahkan. Contoh: anak-anak, pendidikan, mendesak"
-                                class="w-full rounded-md border-gray-300 shadow-sm focus:border-berkah-teal focus:ring-berkah-teal text-sm sm:text-base">
-                            <input type="hidden" name="tags" id="tags_hidden" value="{{ old('tags') }}">
 
-                            <!-- Tags Display -->
-                            <div id="tags_display" class="mt-2 flex flex-wrap gap-1 sm:gap-2"></div>
-
-                            @error('tags')
-                                    <p class="mt-1 text-xs sm:text-sm text-red-600">{{ $message }}</p>
-                            @enderror
-                            <p class="mt-1 text-xs text-gray-500">
-                                Tag membantu donatur menemukan permintaan Anda. Gunakan kata kunci yang relevan.
-                            </p>
-                        </div>
 
                         <!-- Form Actions -->
                         <div
@@ -208,8 +183,7 @@
             </div>
 
             <!-- Tips Section -->
-            <div
-                class="bg-gradient-to-r from-green-50 to-blue-50 overflow-hidden shadow-sm sm:rounded-lg mt-4">
+            <div class="bg-gradient-to-r from-green-50 to-blue-50 overflow-hidden shadow-sm sm:rounded-lg mt-4">
                 <div class="p-4 sm:p-6">
                     <div class="flex items-start">
                         <div class="flex-shrink-0">
@@ -226,7 +200,7 @@
                                 <ul class="space-y-1 list-disc list-inside">
                                     <li>Gunakan judul yang jelas dan spesifik</li>
                                     <li>Sertakan informasi tentang dampak positif yang akan dihasilkan</li>
-                                    <li>Gunakan tag yang relevan untuk memudahkan pencarian</li>
+                                    <li>Jelaskan secara detail mengapa bantuan ini dibutuhkan</li>
                                     <li>Tentukan deadline jika permintaan bersifat mendesak</li>
                                 </ul>
                             </div>
@@ -237,73 +211,5 @@
         </div>
     </div>
 
-    @push('scripts')
-        <script>
-            // Tags Management
-            let tags = [];
 
-            // Initialize tags from old input
-            const oldTags = document.getElementById('tags_hidden').value;
-            if (oldTags) {
-                try {
-                    tags = JSON.parse(oldTags);
-                    displayTags();
-                } catch (e) {
-                    tags = [];
-                }
-            }
-
-            const tagsInput = document.getElementById('tags_input');
-            const tagsDisplay = document.getElementById('tags_display');
-            const tagsHidden = document.getElementById('tags_hidden');
-
-            tagsInput.addEventListener('keydown', function (e) {
-                if (e.key === 'Enter' || e.key === ',') {
-                    e.preventDefault();
-                    addTag();
-                }
-            });
-
-            tagsInput.addEventListener('blur', function () {
-                addTag();
-            });
-
-            function addTag() {
-                const tagText = tagsInput.value.trim();
-                if (tagText && !tags.includes(tagText) && tags.length < 10) {
-                    tags.push(tagText);
-                    tagsInput.value = '';
-                    displayTags();
-                    updateHiddenInput();
-                }
-            }
-
-            function removeTag(index) {
-                tags.splice(index, 1);
-                displayTags();
-                updateHiddenInput();
-            }
-
-            function displayTags() {
-                tagsDisplay.innerHTML = '';
-                tags.forEach((tag, index) => {
-                    const tagElement = document.createElement('span');
-                    tagElement.className = 'inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-berkah-teal text-white';
-                    tagElement.innerHTML = `
-                                                        ${tag}
-                                                        <button type="button" onclick="removeTag(${index})" class="ml-1 inline-flex items-center justify-center w-4 h-4 rounded-full hover:bg-berkah-hijau-gelap">
-                                                            <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-                                                                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
-                                                            </svg>
-                                                        </button>
-                                                    `;
-                    tagsDisplay.appendChild(tagElement);
-                });
-            }
-
-            function updateHiddenInput() {
-                tagsHidden.value = JSON.stringify(tags);
-            }
-        </script>
-    @endpush
 </x-dashboard-layout>

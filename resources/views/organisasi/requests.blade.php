@@ -76,8 +76,7 @@
             @if($requests->count() > 0)
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
                     @foreach($requests as $request)
-                        <div
-                            class="bg-slate-100 overflow-hidden shadow-sm sm:rounded-lg border border-gray-200">
+                        <div class="bg-slate-100 overflow-hidden shadow-sm sm:rounded-lg border border-gray-200">
                             <div class="p-6">
                                 <!-- Status and Urgency -->
                                 <div class="flex items-center justify-between mb-3">
@@ -98,8 +97,7 @@
 
                                 <!-- Category -->
                                 <div class="flex items-center mb-2">
-                                    <span
-                                        class="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">
+                                    <span class="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">
                                         {{ $request->category }}
                                     </span>
                                 </div>
@@ -200,19 +198,7 @@
                                     </form>
                                 </div>
 
-                                <!-- Tags -->
-                                @if($request->tags && count($request->tags) > 0)
-                                    <div class="mt-4 pt-4 border-t border-gray-200">
-                                        <div class="flex flex-wrap gap-1">
-                                            @foreach($request->tags as $tag)
-                                                <span
-                                                    class="px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded-full">
-                                                    {{ $tag }}
-                                                </span>
-                                            @endforeach
-                                        </div>
-                                    </div>
-                                @endif
+
                             </div>
                         </div>
                     @endforeach
@@ -276,6 +262,45 @@
                     message="Apakah Anda yakin ingin menghapus permintaan '{{ $request->title }}'? Tindakan ini tidak dapat dibatalkan."
                     confirmText="Ya, Hapus" cancelText="Batal" confirmClass="bg-red-600 hover:bg-red-700" />
             @endforeach
+
+            <script>
+                function showModal(modalId, form) {
+                    const modal = document.getElementById(modalId);
+                    if (modal) {
+                        modal.style.display = 'flex';
+                        document.body.style.overflow = 'hidden';
+                        modal.dataset.form = form.id;
+                    }
+                }
+
+                // Handle modal confirmations
+                document.addEventListener('click', function (e) {
+                    if (e.target.matches('[data-action="confirm"]')) {
+                        const modal = e.target.closest('.modal');
+                        const formId = modal?.dataset.form;
+                        if (formId) {
+                            document.getElementById(formId).submit();
+                        }
+                    } else if (e.target.matches('[data-action="cancel"]') || e.target.matches('.modal-overlay')) {
+                        const modal = e.target.closest('.modal') || e.target;
+                        if (modal) {
+                            modal.style.display = 'none';
+                            document.body.style.overflow = 'auto';
+                        }
+                    }
+                });
+
+                // Close modal with Escape key
+                document.addEventListener('keydown', function (e) {
+                    if (e.key === 'Escape') {
+                        const modals = document.querySelectorAll('.modal[style*="flex"]');
+                        modals.forEach(modal => {
+                            modal.style.display = 'none';
+                            document.body.style.overflow = 'auto';
+                        });
+                    }
+                });
+            </script>
         </div>
     </div>
 </x-dashboard-layout>

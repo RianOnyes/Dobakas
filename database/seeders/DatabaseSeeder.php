@@ -16,6 +16,10 @@ class DatabaseSeeder extends Seeder
         // Call the UserSeeder to create test accounts
         $this->call([
             UserSeeder::class,
+            AdminSeeder::class,
+            DonaturSeeder::class,
+            OrganizationSeeder::class,
+            DonationSeeder::class,
         ]);
     }
 }

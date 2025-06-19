@@ -20,11 +20,9 @@ class DonationRequest extends Model
         'location',
         'status',
         'needed_by',
-        'tags',
     ];
 
     protected $casts = [
-        'tags' => 'array',
         'needed_by' => 'date',
     ];
 
@@ -65,7 +63,7 @@ class DonationRequest extends Model
      */
     public function getStatusBadgeClass()
     {
-        return match($this->status) {
+        return match ($this->status) {
             'active' => 'bg-green-100 text-green-800',
             'fulfilled' => 'bg-blue-100 text-blue-800',
             'cancelled' => 'bg-red-100 text-red-800',
@@ -78,7 +76,7 @@ class DonationRequest extends Model
      */
     public function getStatusLabel()
     {
-        return match($this->status) {
+        return match ($this->status) {
             'active' => 'Aktif',
             'fulfilled' => 'Terpenuhi',
             'cancelled' => 'Dibatalkan',
@@ -91,7 +89,7 @@ class DonationRequest extends Model
      */
     public function getUrgencyBadgeClass()
     {
-        return match($this->urgency_level) {
+        return match ($this->urgency_level) {
             'low' => 'bg-gray-100 text-gray-800',
             'medium' => 'bg-yellow-100 text-yellow-800',
             'high' => 'bg-red-100 text-red-800',
@@ -104,7 +102,7 @@ class DonationRequest extends Model
      */
     public function getUrgencyLabel()
     {
-        return match($this->urgency_level) {
+        return match ($this->urgency_level) {
             'low' => 'Rendah',
             'medium' => 'Sedang',
             'high' => 'Tinggi',
@@ -120,7 +118,7 @@ class DonationRequest extends Model
         if (!$this->needed_by) {
             return $this->urgency_level === 'high';
         }
-        
+
         return $this->needed_by <= Carbon::now()->addDays(7);
     }
 
@@ -132,7 +130,7 @@ class DonationRequest extends Model
         if (!$this->needed_by) {
             return null;
         }
-        
+
         return $this->needed_by->format('d M Y');
     }
 }

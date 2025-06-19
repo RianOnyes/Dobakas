@@ -16,10 +16,10 @@ class OrganisasiController extends Controller
     public function dashboard()
     {
         $user = auth()->user();
-        
+
         // Get organization details if exists
         $organizationDetail = $user->organizationDetail;
-        
+
         // Get statistics for this organization
         $stats = [
             'total_claimed' => $user->claimedDonations()->count(),
@@ -27,14 +27,14 @@ class OrganisasiController extends Controller
             'completed_donations' => $user->claimedDonations()->where('status', 'completed')->count(),
             'available_donations' => Donation::where('status', 'available')->count(),
         ];
-        
+
         // Get recent claimed donations
         $recentClaims = $user->claimedDonations()
             ->with('user')
             ->latest()
             ->limit(5)
             ->get();
-            
+
         // Get available donations that might interest this organization
         $suggestedDonations = Donation::where('status', 'available')
             ->with('user')
@@ -43,9 +43,9 @@ class OrganisasiController extends Controller
             ->get();
 
         return view('organisasi.dashboard', compact(
-            'organizationDetail', 
-            'stats', 
-            'recentClaims', 
+            'organizationDetail',
+            'stats',
+            'recentClaims',
             'suggestedDonations'
         ));
     }
@@ -56,7 +56,7 @@ class OrganisasiController extends Controller
     public function profile()
     {
         $organizationDetail = auth()->user()->organizationDetail;
-        
+
         return view('organisasi.profile', compact('organizationDetail'));
     }
 
@@ -77,7 +77,7 @@ class OrganisasiController extends Controller
         ]);
 
         $user = auth()->user();
-        
+
         // Handle file upload
         if ($request->hasFile('document_url')) {
             $documentPath = $request->file('document_url')->store('organization_documents', 'public');
@@ -102,14 +102,14 @@ class OrganisasiController extends Controller
     public function claimedDonations(Request $request)
     {
         $status = $request->get('status');
-        
+
         $donations = auth()->user()->claimedDonations()
             ->with('user');
-            
+
         if ($status) {
             $donations->where('status', $status);
         }
-        
+
         $donations = $donations->latest()->paginate(9);
 
         return view('organisasi.claimed-donations', compact('donations', 'status'));
@@ -125,14 +125,14 @@ class OrganisasiController extends Controller
 
         $donations = Donation::where('status', 'available')
             ->with('user')
-            ->when($search, function($query) use ($search) {
-                return $query->where(function($q) use ($search) {
+            ->when($search, function ($query) use ($search) {
+                return $query->where(function ($q) use ($search) {
                     $q->where('title', 'like', "%{$search}%")
-                      ->orWhere('description', 'like', "%{$search}%")
-                      ->orWhere('category', 'like', "%{$search}%");
+                        ->orWhere('description', 'like', "%{$search}%")
+                        ->orWhere('category', 'like', "%{$search}%");
                 });
             })
-            ->when($category, function($query) use ($category) {
+            ->when($category, function ($query) use ($category) {
                 return $query->where('category', $category);
             })
             ->latest()
@@ -146,9 +146,9 @@ class OrganisasiController extends Controller
             ->sort();
 
         return view('organisasi.warehouse-donations', compact(
-            'donations', 
-            'search', 
-            'category', 
+            'donations',
+            'search',
+            'category',
             'categories'
         ));
     }
@@ -160,7 +160,8 @@ class OrganisasiController extends Controller
     {
         // Make sure this is an available donation
         if ($donation->status !== 'available') {
-            abort(404, 'Donasi tidak tersedia.');
+            // Add debug information to help identify the issue
+            abort(404, "Donasi tidak tersedia. Status saat ini: {$donation->status}");
         }
 
         $donation->load('user');
@@ -175,7 +176,7 @@ class OrganisasiController extends Controller
     {
         // Make sure this is an available donation
         if ($donation->status !== 'available') {
-            return back()->with('error', 'Donasi tidak tersedia untuk diklaim.');
+            return back()->with('error', "Donasi tidak tersedia untuk diklaim. Status saat ini: {$donation->status}");
         }
 
         // Make sure organization has complete profile
@@ -218,9 +219,9 @@ class OrganisasiController extends Controller
     public function requests(Request $request)
     {
         $status = $request->get('status');
-        
+
         $requests = auth()->user()->donationRequests()
-            ->when($status, function($query) use ($status) {
+            ->when($status, function ($query) use ($status) {
                 return $query->where('status', $status);
             })
             ->latest()
@@ -249,9 +250,7 @@ class OrganisasiController extends Controller
             'urgency_level' => 'required|in:low,medium,high',
             'quantity_needed' => 'nullable|integer|min:1',
             'location' => 'nullable|string|max:500',
-            'needed_by' => 'nullable|date|after:today',
-            'tags' => 'nullable|array',
-            'tags.*' => 'string|max:50'
+            'needed_by' => 'nullable|date|after:today'
         ]);
 
         // Make sure organization has complete profile
@@ -269,7 +268,6 @@ class OrganisasiController extends Controller
             'quantity_needed' => $validated['quantity_needed'],
             'location' => $validated['location'] ?? $organizationDetail->organization_address,
             'needed_by' => $validated['needed_by'],
-            'tags' => $validated['tags'] ?? [],
             'status' => 'active'
         ]);
 
@@ -305,7 +303,7 @@ class OrganisasiController extends Controller
 
         $request->update(['status' => $validated['status']]);
 
-        $statusLabel = match($validated['status']) {
+        $statusLabel = match ($validated['status']) {
             'fulfilled' => 'terpenuhi',
             'cancelled' => 'dibatalkan',
             'active' => 'diaktifkan kembali',
@@ -329,4 +327,4 @@ class OrganisasiController extends Controller
 
         return back()->with('success', 'Permintaan berhasil dihapus.');
     }
-} 
+}
